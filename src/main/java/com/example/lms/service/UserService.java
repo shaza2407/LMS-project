@@ -2,9 +2,13 @@ package com.example.lms.service;
 
 import com.example.lms.model.User;
 import com.example.lms.repository.UserRepository;
+import org.springframework.stereotype.Service;
+
 import java.util.List;
 
+@Service
 public class UserService {
+
     private final UserRepository userRepository;
 
     public UserService(UserRepository userRepository) {
@@ -16,15 +20,18 @@ public class UserService {
     }
 
     public User getUserById(Long id) {
-        return userRepository.findById(id);
+        User user = userRepository.findById(id);
+        if (user == null) {
+            throw new RuntimeException("User not found!");
+        }
+        return user;
     }
 
-    public void createUser(User user) {
-        userRepository.save(user);
+    public User createUser(User user) {
+        return userRepository.save(user);
     }
 
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
     }
-
 }

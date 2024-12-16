@@ -2,28 +2,46 @@ package com.example.lms.controller;
 
 import com.example.lms.model.User;
 import com.example.lms.service.UserService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
+@RestController
+@RequestMapping("/api/users") // Base endpoint for user-related APIs
 public class UserController {
+
     private final UserService userService;
 
     public UserController(UserService userService) {
         this.userService = userService;
     }
 
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
+    // GET all users
+    @GetMapping
+    public ResponseEntity<List<User>> getAllUsers() {
+        List<User> users = userService.getAllUsers();
+        return ResponseEntity.ok(users);
     }
 
-    public User getUserById(Long id) {
-        return userService.getUserById(id);
+    // GET a user by ID
+    @GetMapping("/{id}")
+    public ResponseEntity<User> getUserById(@PathVariable Long id) {
+        User user = userService.getUserById(id);
+        return ResponseEntity.ok(user);
     }
 
-    public void createUser(User user) {
-        userService.createUser(user);
+    // POST to create a new user
+    @PostMapping
+    public ResponseEntity<User> createUser(@RequestBody User user) {
+        User createdUser = userService.createUser(user);
+        return ResponseEntity.ok(createdUser);
     }
 
-    public void deleteUser(Long id) {
+    // DELETE a user by ID
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
+        return ResponseEntity.noContent().build();
     }
 }
