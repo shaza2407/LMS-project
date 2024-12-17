@@ -10,7 +10,7 @@ public class AppConfig {
 
     @Bean
     public UserRepository userRepository() {
-        return new InMemoryUserRepository();
+        return new UserRepository();
     }
 
     @Bean
