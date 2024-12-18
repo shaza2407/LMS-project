@@ -1,7 +1,13 @@
 package com.example.lms.model;
 
-import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
+import java.time.LocalDateTime;
+@AllArgsConstructor
+@Getter
+@Setter
 public class Notification {
     private Long id;
     private String recipientRole; // "STUDENT", "INSTRUCTOR", etc.
@@ -17,17 +23,10 @@ public class Notification {
         this.timestamp = LocalDateTime.now();
     }
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
 
-    public String getRecipientRole() { return recipientRole; }
-    public void setRecipientRole(String recipientRole) { this.recipientRole = recipientRole; }
-
-    public String getMessage() { return message; }
-    public void setMessage(String message) { this.message = message; }
 
     public boolean isRead() { return isRead; }
     public void markAsRead() { this.isRead = true; }
 
-    public LocalDateTime getTimestamp() { return timestamp; }
+
 }
