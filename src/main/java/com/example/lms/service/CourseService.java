@@ -2,8 +2,10 @@ package com.example.lms.service;
 
 import com.example.lms.model.Course;
 import com.example.lms.repository.CourseRepository;
-import java.util.List;
+import org.springframework.stereotype.Service;
 
+import java.util.List;
+@Service
 public class CourseService {
     private final CourseRepository courseRepository;
 

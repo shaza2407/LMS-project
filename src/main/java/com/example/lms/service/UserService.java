@@ -2,18 +2,17 @@ package com.example.lms.service;
 
 import com.example.lms.model.User;
 import com.example.lms.repository.UserRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
+@AllArgsConstructor
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
 
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+
 
     public List<User> getAllUsers() {
         return userRepository.findAll();

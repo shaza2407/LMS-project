@@ -2,20 +2,22 @@ package com.example.lms.controller;
 
 import com.example.lms.model.User;
 import com.example.lms.service.UserService;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@AllArgsConstructor
 @RequestMapping("/api/users") // Base endpoint for user-related APIs
 public class UserController {
 
     private final UserService userService;
 
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
+//    public UserController(UserService userService) {
+//        this.userService = userService;
+//    }
 
     // GET all users
     @GetMapping
