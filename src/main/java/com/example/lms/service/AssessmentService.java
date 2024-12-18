@@ -2,14 +2,14 @@ package com.example.lms.service;
 
 import com.example.lms.model.Assessment;
 import com.example.lms.repository.AssessmentRepository;
-import java.util.List;
+import lombok.AllArgsConstructor;
 
+import java.util.List;
+@AllArgsConstructor
 public class AssessmentService {
     private final AssessmentRepository assessmentRepository;
 
-    public AssessmentService(AssessmentRepository assessmentRepository) {
-        this.assessmentRepository = assessmentRepository;
-    }
+
 
     public List<Assessment> getAllAssessments() {
         return assessmentRepository.findAll();
