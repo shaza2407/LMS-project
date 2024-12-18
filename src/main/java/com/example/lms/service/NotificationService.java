@@ -7,7 +7,7 @@ import java.util.List;
 public class NotificationService {
     private final List<Notification> notifications = new ArrayList<>();
 
-    public List<Notification> getAllNotifications(String role) {
+    public List<Notification> getAllNotifications(String role) {//this should be an id i guess not role based
         List<Notification> filteredNotifications = new ArrayList<>();
         for (Notification notification : notifications) {
             if (notification.getRecipientRole().equals(role)) {
