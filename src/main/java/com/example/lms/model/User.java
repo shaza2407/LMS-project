@@ -1,9 +1,6 @@
 package com.example.lms.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,8 +16,9 @@ public class User {
     private Long id;
     private String name;
     private String email;
-    private String role; // "Admin", "Instructor", "Student"
-
+    private String password;
+    @Enumerated(EnumType.STRING)
+    private Role role; // ADMIN, INSTRUCTOR, STUDENT
     // Constructor
     public User() {}
 
@@ -28,7 +26,7 @@ public class User {
         this.id = id;
         this.name = name;
         this.email = email;
-        this.role = role;
+        this.role = Role.valueOf(role);
     }
 
 
