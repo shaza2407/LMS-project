@@ -1,11 +1,17 @@
 package com.example.lms.repository;
 
 import com.example.lms.model.Course;
+import com.example.lms.model.User;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
 import java.util.List;
 
-public interface CourseRepository {
-    List<Course> findAll();
-    Course findById(Long id);
-    void save(Course course);
-    void deleteById(Long id);
+@Repository
+public interface CourseRepository extends JpaRepository<Course, Long> {
+    // Find all courses created by a specific instructor
+    List<Course> findByInstructor(User instructor);
+
+    // Find courses by title containing a keyword (for search functionality)
+    List<Course> findByTitleContaining(String keyword);
 }
