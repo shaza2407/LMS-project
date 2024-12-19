@@ -24,7 +24,7 @@ public class NotificationController
         return ResponseEntity.ok(notification);
     }
 
-    @GetMapping("/{unread}")
+    @GetMapping("/unread")
     public ResponseEntity<List<Notification>> getAllUnreadNotifications(String role)
     {
         List<Notification> allNotification = notificationService.getAllNotifications(role);
