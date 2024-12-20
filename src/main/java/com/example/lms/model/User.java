@@ -15,16 +15,18 @@ public class User {
     private Long id;
     private String name;
     private String email;
-    private String role; // "Admin", "Instructor", "Student"
-
+    @Enumerated(EnumType.STRING)
+    private Role role; // ADMIN, INSTRUCTOR, STUDENT
     // Constructor
-    public User() {}
 
-        public User(Long id, String name, String email, String role) {
+
+
+    public  User() {
         this.id = id;
         this.name = name;
         this.email = email;
         this.role = role;
+//        this.role = Role.valueOf(role);
     }
 
 
