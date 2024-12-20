@@ -1,10 +1,13 @@
 package com.example.lms.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 @Entity
@@ -17,17 +20,5 @@ public class User {
     private String email;
     @Enumerated(EnumType.STRING)
     private Role role; // ADMIN, INSTRUCTOR, STUDENT
-    // Constructor
-
-
-
-    public  User() {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.role = role;
-//        this.role = Role.valueOf(role);
-    }
-
 
 }

@@ -1,13 +1,11 @@
 package com.example.lms.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import org.springframework.data.annotation.Id;
-import jakarta.persistence.ManyToOne;
+
 import java.time.LocalDateTime;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Getter
@@ -27,4 +25,11 @@ public class Attendance {
 
     private String otp; // OTP for lesson attendance
     private LocalDateTime timestamp;
+
+    public Attendance() {
+
+    }
+
+    public Attendance(Long studentId, Long lessonId) {
+    }
 }

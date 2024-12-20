@@ -1,18 +1,21 @@
 package com.example.lms.model;
 
 import jakarta.persistence.*;
-import org.springframework.data.annotation.Id;
+import lombok.NoArgsConstructor;
+
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 @AllArgsConstructor
+@NoArgsConstructor
+
 @Getter
 @Setter
 @Entity
 public class Lesson {
-    @Id
+     @Id //change it to the annotation of jakarta
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
