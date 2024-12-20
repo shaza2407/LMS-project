@@ -1,46 +1,43 @@
-
-
-
 //package com.example.lms.config;
 //
-//import org.springframework.context.annotation.Bean;
 //import org.springframework.context.annotation.Configuration;
-//import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+//import org.springframework.http.HttpMethod;
 //import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-//import org.springframework.security.crypto.password.PasswordEncoder;
-//import org.springframework.security.web.SecurityFilterChain;
 //
 //@Configuration
-//public class SecurityConfig {
+//@EnableWebSecurity
+//public class SecurityConfig extends WebSecurityConfigurerAdapter {
+//    @Override
+//    protected void configure(HttpSecurity http) throws Exception {
+//        http.csrf().disable()
+//                .authorizeRequests()
+//                .antMatchers("/api/enrollments/**").hasRole("STUDENT")
+//                .anyRequest().authenticated()
+//                .and()
+//                .httpBasic(); // Or use JWT for token-based authentication
 //
-//    @Bean
-//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-//        http
-//                .authorizeHttpRequests(authorize -> authorize
-//                        .requestMatchers("/admin/**").hasRole("ADMIN")
-//                        .requestMatchers("/instructor/**").hasRole("INSTRUCTOR")
-//                        .requestMatchers("/student/**").hasRole("STUDENT")
-//                        .requestMatchers("/", "/login", "/css/**", "/js/**", "/images/**").permitAll()
-//                        .anyRequest().authenticated()
-//                )
-//                .formLogin(form -> form
-//                        .loginPage("/login")
-//                        .defaultSuccessUrl("/", true)
-//                        .permitAll()
-//                )
-//                .logout(logout -> logout
-//                        .logoutUrl("/logout")
-//                        .logoutSuccessUrl("/login?logout")
-//                        .permitAll()
-//                )
-//                .csrf(csrf -> csrf.disable());
+//        http.csrf().disable()
+//                .authorizeRequests()
+//                .antMatchers("/api/attendance/generate-otp/**").hasRole("INSTRUCTOR")
+//                .antMatchers("/api/attendance/attend/**").hasRole("STUDENT")
+//                .anyRequest().authenticated()
+//                .and()
+//                .httpBasic();
 //
-//        return http.build();
-//    }
+//        http.csrf().disable()
+//                .authorizeRequests()
+//                .antMatchers(HttpMethod.POST, "/api/courses/{courseId}/enroll").hasRole("STUDENT")
+//                .antMatchers(HttpMethod.POST, "/api/courses/{courseId}/lessons/{lessonId}/attend").hasRole("STUDENT")
+//                .anyRequest().authenticated()
+//                .and()
+//                .httpBasic();
 //
-//    @Bean
-//    public PasswordEncoder passwordEncoder() {
-//        return new BCryptPasswordEncoder();
+//        http.authorizeRequests()
+//                .antMatchers(HttpMethod.POST, "/api/instructor/**").hasRole("INSTRUCTOR")
+//                .antMatchers(HttpMethod.GET, "/api/instructor/**").hasRole("INSTRUCTOR")
+//                .antMatchers(HttpMethod.GET, "/api/student/**").hasRole("STUDENT")
+//                .antMatchers(HttpMethod.POST, "/api/student/**").hasRole("STUDENT")
+//                .anyRequest().authenticated();
+//
 //    }
 //}

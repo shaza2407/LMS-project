@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Entity
+// For Assignments
 public class Submission {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

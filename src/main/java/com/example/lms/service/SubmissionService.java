@@ -34,6 +34,7 @@ public class SubmissionService {
         return submissionRepository.save(submission);
     }
 
+// By student
     public String submitAssignment(Long studentId, Long assessmentId, String filePath) {
         // Fetch the assessment
         Assessment assessment = assessmentRepository.findById(assessmentId)
