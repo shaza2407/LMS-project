@@ -21,4 +21,5 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role; // ADMIN, INSTRUCTOR, STUDENT
 
+
 }

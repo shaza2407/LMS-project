@@ -1,53 +1,41 @@
 package com.example.lms.service;
 import com.example.lms.model.Assessment;
+import com.example.lms.model.Course;
 import com.example.lms.repository.AssessmentRepository;
+import com.example.lms.repository.CourseRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import com.example.lms.repository.EnrollmentRepository;
 
 import java.util.List;
 
-@AllArgsConstructor
 @Service
+@AllArgsConstructor
 public class AssessmentService {
     private final AssessmentRepository assessmentRepository;
-    public void createQuiz(Long courseId, Assessment quiz) {//take the course id and assessment object
-        quiz.setCourseId(courseId);                        //assign this quiz to specific course
-        quiz.setType("QUIZ");                               //set the type of the assessment to quiz
-        assessmentRepository.save(quiz);                     //add to assessment repository
+    private final CourseRepository courseRepository;
+    private final EnrollmentRepository enrollmentRepository;
+
+    // Create an assessment
+    public Assessment createAssessment(Long instructorId, Long courseId, Assessment assessment) {
+        Course course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new RuntimeException("Course not found"));
+
+        if (!course.getInstructor().getId().equals(instructorId)) {
+            throw new RuntimeException("Instructor does not own this course");
+        }
+
+        assessment.setCourse(course);
+        return assessmentRepository.save(assessment);
     }
 
-    public void createAssignment(Long courseId, Assessment assignment) {//take the course id and assessment object
-        assignment.setCourseId(courseId);
-        assignment.setType("ASSIGNMENT");
-        assessmentRepository.save(assignment);
-    }
-
-    public void gradeQuiz(Long quizId, String grade) {
-        // Logic to grade quiz submissions
-        Assessment quiz = assessmentRepository.findById(quizId);
-        quiz.setGrade(grade);
-        assessmentRepository.save(quiz);
-    }
-
-    public String getTrackingData(Long courseId) {
-        // Logic to fetch attendance and scores
-        return "Attendance and scores for course: " + courseId;
-    }
-
-    // Existing Methods
-    public List<Assessment> getAllAssessments() {
-        return assessmentRepository.findAll();
-    }
-
-    public Assessment getAssessmentById(Long id) {
-        return assessmentRepository.findById(id);
-    }
-
-    public void createAssessment(Assessment assessment) {
-        assessmentRepository.save(assessment);
-    }
-
-    public void deleteAssessment(Long id) {
-        assessmentRepository.deleteById(id);
+    // Get assessments for a student's course
+    public List<Assessment> getAssessmentsForStudent(Long studentId, Long courseId) {
+        boolean isEnrolled = enrollmentRepository.existsByCourseIdAndStudentId(courseId, studentId);
+        if (!isEnrolled) {
+            throw new RuntimeException("Student is not enrolled in this course");
+        }
+        return assessmentRepository.findByCourseId(courseId);
     }
 }
+

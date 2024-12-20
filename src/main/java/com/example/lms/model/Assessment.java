@@ -6,22 +6,31 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@AllArgsConstructor
-@NoArgsConstructor
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
-@Table
 public class Assessment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long courseId;   //this assessment to which course
-    private String type; // if it's quiz or assignment
-    private String title; // Title of the assessment
-    private String content; // Quiz questions or assignment details
-    private String grade; // Grade for the assessment
 
+    @ManyToOne
+    @JoinColumn(name = "course_id", nullable = false)
+    private Course course;
 
+    private String title;
 
+    @Enumerated(EnumType.STRING)
+    private AssessmentType type; // QUIZ or ASSIGNMENT
+
+    private LocalDateTime deadline;
+
+    @Column(length = 2000)
+    private String description;
+
+    private boolean graded; // For tracking if the assessment has been graded
 }

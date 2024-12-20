@@ -1,31 +1,31 @@
 package com.example.lms.service;
 
 import com.example.lms.model.Course;
+import com.example.lms.model.Lesson;
 import com.example.lms.repository.CourseRepository;
+import com.example.lms.repository.LessonRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+
 @Service
 public class CourseService {
-    private final CourseRepository courseRepository;
+    @Autowired
+    private CourseRepository courseRepository;
 
-    public CourseService(CourseRepository courseRepository) {
-        this.courseRepository = courseRepository;
+    @Autowired
+    private LessonRepository lessonRepository;
+
+    public Course getCourseById(Long courseId) {
+        return courseRepository.findById(courseId)
+                .orElseThrow(() -> new RuntimeException("Course not found"));
     }
 
-    public List<Course> getAllCourses() {
-        return courseRepository.findAll();
-    }
-
-    public Course getCourseById(Long id) {
-        return courseRepository.findById(id);
-    }
-
-    public void createCourse(Course course) {
-        courseRepository.save(course);
-    }
-
-    public void deleteCourse(Long id) {
-        courseRepository.deleteById(id);
+    public Lesson getLessonById(Long lessonId) {
+        return lessonRepository.findById(lessonId)
+                .orElseThrow(() -> new RuntimeException("Lesson not found"));
     }
 }
+

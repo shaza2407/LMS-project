@@ -1,29 +1,44 @@
 package com.example.lms.controller;
 
 import com.example.lms.model.Course;
+import com.example.lms.service.AttendanceService;
 import com.example.lms.service.CourseService;
+import com.example.lms.service.EnrollmentService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
+import java.util.Optional;
 
+@RestController
+@RequestMapping("/api/courses")
 public class CourseController {
-    private final CourseService courseService;
 
-    public CourseController(CourseService courseService) {
-        this.courseService = courseService;
+    @Autowired
+    private EnrollmentService enrollmentService;
+
+    @Autowired
+    private AttendanceService attendanceService;
+
+    // Endpoint for enrolling a student in a course
+    @PostMapping("/{courseId}/enroll")
+    public ResponseEntity<String> enrollStudent(
+            @PathVariable Long courseId,
+            @RequestParam Long studentId) {
+        String response = enrollmentService.enrollStudent(courseId, studentId);
+        return ResponseEntity.ok(response);
     }
 
-    public List<Course> getAllCourses() {
-        return courseService.getAllCourses();
-    }
-
-    public Course getCourseById(Long id) {
-        return courseService.getCourseById(id);
-    }
-
-    public void createCourse(Course course) {
-        courseService.createCourse(course);
-    }
-
-    public void deleteCourse(Long id) {
-        courseService.deleteCourse(id);
+    // Endpoint for attending a lesson via OTP
+    @PostMapping("/{courseId}/lessons/{lessonId}/attend")
+    public ResponseEntity<String> attendLesson(
+            @PathVariable Long courseId,
+            @PathVariable Long lessonId,
+            @RequestParam Long studentId,
+            @RequestParam String otp) {
+        String response = attendanceService.attendLesson(lessonId, studentId, otp);
+        return ResponseEntity.ok(response);
     }
 }
+

@@ -1,16 +1,14 @@
 package com.example.lms.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 @Entity
 public class Attendance {
     @Id
@@ -23,13 +21,9 @@ public class Attendance {
     @ManyToOne
     private User student;
 
-    private String otp; // OTP for lesson attendance
+    private String otp; // OTP for attendance validation
     private LocalDateTime timestamp;
 
-    public Attendance() {
+    private boolean attended; // Flag to check attendance status
 
-    }
-
-    public Attendance(Long studentId, Long lessonId) {
-    }
 }
