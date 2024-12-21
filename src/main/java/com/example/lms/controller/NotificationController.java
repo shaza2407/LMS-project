@@ -3,6 +3,7 @@ package com.example.lms.controller;
 import com.example.lms.model.Notification;
 import com.example.lms.service.NotificationService;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,4 +39,14 @@ public class NotificationController
         }
         return ResponseEntity.ok(UnreadNotification);
     }
+
+    // Dummy Example for how to use mail service in service files
+//    @Autowired
+//    private NotificationService notification;
+//    @GetMapping("/Email")
+//    public String testEmail()
+//    {
+//        notification.setNotificationsEmail("modyhassan917@gmail.com", "Lms","This is LMS project bonus;) :)");
+//        return "email sent";
+//    }
 }
