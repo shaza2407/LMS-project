@@ -17,7 +17,7 @@ spring:
     host: smtp.gmail.com
     port: 587
     username: lmsprojectfcai@gmail.com
-    password: otlpjjusteoistae
+    password:
     properties:
       mail:
         smtp:
