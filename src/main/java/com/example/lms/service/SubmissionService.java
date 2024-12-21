@@ -46,7 +46,7 @@ public class SubmissionService {
         }
 
         // Fetch the student entity
-        User student = userRepository.findById(studentId)
+        User student = userRepository.findById(String.valueOf(studentId))
                 .orElseThrow(() -> new RuntimeException("Student not found"));
 
         // Create and save the submission

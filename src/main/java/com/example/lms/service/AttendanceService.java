@@ -29,7 +29,7 @@ public class AttendanceService {
         Lesson lesson = lessonRepository.findById(lessonId)
                 .orElseThrow(() -> new RuntimeException("Lesson not found"));
 
-        User student = userRepository.findById(studentId)
+        User student = userRepository.findById(String.valueOf(studentId))
                 .orElseThrow(() -> new RuntimeException("Student not found"));
 
         // Check if the OTP matches

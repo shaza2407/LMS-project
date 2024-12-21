@@ -25,7 +25,7 @@ public class EnrollmentService {
         // Fetch the course and student
         Course course = courseRepository.findById(courseId)
                 .orElseThrow(() -> new RuntimeException("Course not found"));
-        User student = userRepository.findById(studentId)
+        User student = userRepository.findById(String.valueOf(studentId))
                 .orElseThrow(() -> new RuntimeException("Student not found"));
 
         // Check if the user is already enrolled
