@@ -15,11 +15,8 @@ import java.time.LocalDateTime;
 @Entity
 public class Assessment {
     @Id
-    private Long id;
-    private Long courseId;
-    private String content; // Quiz questions or assignment details
-    private String grade;
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "course_id", nullable = false)
