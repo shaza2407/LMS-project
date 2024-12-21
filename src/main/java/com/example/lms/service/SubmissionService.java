@@ -39,7 +39,6 @@ public class SubmissionService {
         // Fetch the assessment
         Assessment assessment = assessmentRepository.findById(assessmentId)
                 .orElseThrow(() -> new RuntimeException("Assessment not found"));
-
         // Ensure it's an assignment type
         if (assessment.getType() != AssessmentType.ASSIGNMENT) {
             throw new RuntimeException("This assessment is not an assignment");
