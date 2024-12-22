@@ -1,40 +1,72 @@
-//package com.example.lms.service;
-//
-//import com.example.lms.model.User;
-//import com.example.lms.repository.UserRepository;
-//import lombok.AllArgsConstructor;
-//import org.springframework.stereotype.Service;
-//
-//import java.util.List;
-//
-//@AllArgsConstructor
-//@Service
-//public class AdminService {
-//
-//    private  final UserRepository userRepository;
-//
-//    // Fetch all users
-//    public  List<User> getAllUsers() {
-//        return userRepository.findAll();
-//    }
-//
-//    // Fetch user by ID
-//    public  User getUserById(String id) {
-//        return userRepository.findById(id)
-//                .orElseThrow(() -> new RuntimeException("User not found!"));
-//    }
-//
-//    // Create a new user
-//    public  User createUser(User user) {
-//        return userRepository.save(user);
-//    }
-//
-//    // Delete a user by ID
-//    public  void deleteUser(String id) {
-//        // Check if the user exists before attempting to delete
-//        if (!userRepository.existsById(id)) {
-//            throw new RuntimeException("User with ID " + id + " does not exist!");
-//        }
-//        userRepository.deleteById(id);
-//    }
-//}
+package com.example.lms.service;
+
+import com.example.lms.model.User;
+import com.example.lms.repository.UserRepository;
+import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@AllArgsConstructor
+@Service
+public class AdminService {
+    private final UserRepository userRepository;
+    private final JwtService jwtService;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    // Create a new user
+    public ResponseEntity<?> register(User user) {
+        if (userRepository.existsByEmail(user.getEmail())) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        User newUser = new User();
+        newUser.setEmail(user.getEmail());
+        newUser.setName(user.getName());
+        newUser.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        newUser.setRole(user.getRole());
+        user = userRepository.save(newUser);
+        String token = jwtService.generateToken(user);
+        Map<String, Object> response = new HashMap<>();
+        response.put("token", token);
+        response.put("user", user);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    // Fetch all users
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+    
+    //update user
+    public User updateUser(Long id, User updatedUser) {
+        User user = userRepository.findById(String.valueOf(id))
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        user.setName(updatedUser.getName());
+        user.setEmail(updatedUser.getEmail());
+        user.setPassword(bCryptPasswordEncoder.encode(updatedUser.getPassword()));
+        user.setRole(updatedUser.getRole());
+        return userRepository.save(user);
+    }
+
+    // DELETE a user by ID
+    public void deleteUser(Long id) {
+        // Check if the user exists before attempting to delete
+        if (!userRepository.existsById(String.valueOf(id))) {
+            throw new RuntimeException("User with ID " + id + " does not exist!");
+        }else{
+        }
+        userRepository.deleteById(String.valueOf(id));
+    }
+    // Fetch user by ID
+    public  User getUserById(String id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found!"));
+    }
+
+}
+
