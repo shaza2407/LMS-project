@@ -31,4 +31,14 @@ public class AttendanceController {
         String response = attendanceService.attendLesson(lessonId, studentId, otp);
         return ResponseEntity.ok(response);
     }
+//    Endpoint for attending a lesson via OTP
+//    @PostMapping("/{courseId}/lessons/{lessonId}/attend")
+//    public ResponseEntity<String> attendLesson(
+//            @PathVariable Long courseId,
+//            @PathVariable Long lessonId,
+//            @RequestParam Long studentId,
+//            @RequestParam String otp) {
+//        String response = attendanceService.attendLesson(lessonId, studentId, otp);
+//        return ResponseEntity.ok(response);
+//    }
 }

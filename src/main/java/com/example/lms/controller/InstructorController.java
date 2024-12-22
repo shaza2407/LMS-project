@@ -17,14 +17,14 @@ public class InstructorController {
     private final AssessmentService assessmentService;
     private final SubmissionService submissionService;
 
-    @PostMapping("/{instructorId}/courses/{courseId}/assessments")
-    public ResponseEntity<Assessment> createAssessment(
-            @PathVariable Long instructorId,
-            @PathVariable Long courseId,
-            @RequestBody Assessment assessment) {
-        Assessment createdAssessment = assessmentService.createAssessment(instructorId, courseId, assessment);
-        return ResponseEntity.ok(createdAssessment);
-    }
+//    @PostMapping("/{instructorId}/courses/{courseId}/assessments")
+//    public ResponseEntity<Assessment> createAssessment(
+//            @PathVariable Long instructorId,
+//            @PathVariable Long courseId,
+//            @RequestBody Assessment assessment) {
+//        Assessment createdAssessment = assessmentService.createAssessment(instructorId, courseId, assessment);
+//        return ResponseEntity.ok(createdAssessment);
+//    }
 
     @GetMapping("/assessments/{assessmentId}/submissions")
     public ResponseEntity<List<Submission>> getSubmissions(@PathVariable Long assessmentId) {

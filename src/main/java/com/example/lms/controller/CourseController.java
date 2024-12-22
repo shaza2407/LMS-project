@@ -34,17 +34,6 @@ public class CourseController {
         return ResponseEntity.ok(response);
     }
 
-    // Endpoint for attending a lesson via OTP
-    @PostMapping("/{courseId}/lessons/{lessonId}/attend")
-    public ResponseEntity<String> attendLesson(
-            @PathVariable Long courseId,
-            @PathVariable Long lessonId,
-            @RequestParam Long studentId,
-            @RequestParam String otp) {
-        String response = attendanceService.attendLesson(lessonId, studentId, otp);
-        return ResponseEntity.ok(response);
-    }
-
     // Endpoint for creating a new course (Admin/Instructor)
     @PostMapping("/createCourse")
     public ResponseEntity<Course> createCourse(@RequestBody Course course) {

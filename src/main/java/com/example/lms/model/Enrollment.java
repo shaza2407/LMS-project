@@ -1,5 +1,6 @@
 package com.example.lms.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
 import jakarta.persistence.ManyToOne;
@@ -19,6 +20,7 @@ public class Enrollment {
     private Long id;
 
     @ManyToOne
+    @JsonIgnore
     private Course course;
 
     @ManyToOne

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.example.lms.repository.EnrollmentRepository;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @AllArgsConstructor
@@ -31,12 +32,22 @@ public class AssessmentService {
 
     // Get assessments for a student's course
     public List<Assessment> getAssessmentsForStudent(Long studentId, Long courseId) {
-        boolean isEnrolled = enrollmentRepository.existsByCourseIdAndStudentId(courseId, studentId);
-        if (!isEnrolled) {
-            throw new RuntimeException("Student is not enrolled in this course");
+        // Check if the student is enrolled in the course
+        if (!enrollmentRepository.existsByCourseIdAndStudentId(courseId, studentId)) {
+            throw new IllegalArgumentException("Student is not enrolled in this course.");
         }
-        return assessmentRepository.findByCourseId(courseId);
+
+        // Fetch assessments associated with the course for the student
+        List<Assessment> assessments = assessmentRepository.findByCourseId(courseId);
+
+        // Optional: Ensure assessments are filtered for the specific student, if needed
+        if (assessments.isEmpty()) {
+            throw new NoSuchElementException("No assessments found for this course.");
+        }
+
+        return assessments;
     }
+
 
     public void deleteAssessment(Long id) {
         assessmentRepository.deleteById(id);

@@ -1,5 +1,7 @@
 package com.example.lms.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,6 +28,7 @@ public class Course {
     private User instructor;
 
     @OneToMany(mappedBy = "course")
+    //@JsonManagedReference
     private List<Enrollment> enrollments;
 
     @OneToMany(mappedBy = "course")
