@@ -4,6 +4,7 @@ import com.example.lms.model.Course;
 import com.example.lms.service.AttendanceService;
 import com.example.lms.service.CourseService;
 import com.example.lms.service.EnrollmentService;
+import jakarta.annotation.security.RolesAllowed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +23,7 @@ public class CourseController {
     private AttendanceService attendanceService;
 
     // Endpoint for enrolling a student in a course
+//    @RolesAllowed({"STUDENT"})
     @PostMapping("/{courseId}/enroll")
     public ResponseEntity<String> enrollStudent(
             @PathVariable Long courseId,

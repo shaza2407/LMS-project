@@ -52,5 +52,9 @@ public class UserService {
         response.put("user", foundUser);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+    public User getUserById(Long userId) {
+        return userRepository.findById(String.valueOf(userId))
+                .orElseThrow(() -> new RuntimeException("User not found"));
+    }
 }
 

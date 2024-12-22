@@ -1,17 +1,10 @@
 package com.example.lms.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
-
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
+@Data
 @Entity
 public class Course {
     @Id
@@ -23,6 +16,7 @@ public class Course {
 
     @ManyToOne
     private User instructor;
+
 
     @OneToMany(mappedBy = "course")
     private List<Enrollment> enrollments;

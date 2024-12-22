@@ -21,6 +21,7 @@ public class EnrollmentService {
 
     @Autowired
     private UserRepository userRepository;
+
     public String enrollStudent(Long courseId, Long studentId) {
         // Fetch the course and student
         Course course = courseRepository.findById(courseId)
