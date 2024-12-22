@@ -4,17 +4,13 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-@AllArgsConstructor
 @Getter
 @Setter
-@NoArgsConstructor
 @Entity
 public class Notification
 {
@@ -26,7 +22,17 @@ public class Notification
     private boolean isRead;
     private LocalDateTime timestamp;
 
+    public Notification(String recipientRole, String message, LocalDateTime timestamp)
+    {
+        this.recipientRole = recipientRole;
+        this.message = message;
+        this.isRead = false;
+        this.timestamp = timestamp;
+    }
 
+    public Notification()
+    {
+    }
 
 
     public boolean isRead()
@@ -34,8 +40,10 @@ public class Notification
         return isRead;
     }
 
+
     public void markAsRead()
     {
+
         this.isRead = true;
     }
 }

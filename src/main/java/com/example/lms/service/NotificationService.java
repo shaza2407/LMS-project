@@ -1,6 +1,8 @@
 package com.example.lms.service;
 
 import com.example.lms.model.Notification;
+import com.example.lms.repository.CourseRepository;
+import com.example.lms.repository.NotificationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -12,35 +14,33 @@ import java.util.List;
 @Service
 public class NotificationService
 {
-    private final List<Notification> notifications = new ArrayList<>();
 
-    public List<Notification> getAllNotifications(String role)
-    {//this should be an id i guess not role based
-        List<Notification> filteredNotifications = new ArrayList<>();
-        for (Notification notification : notifications)
-        {
-            if (notification.getRecipientRole().equals(role))
-            {
-                filteredNotifications.add(notification);
-            }
-        }
-        return filteredNotifications;
-    }
+    @Autowired
+    private NotificationRepository notificationRepository;
 
-    public void addNotification(Notification notification)
+
+    public List<Notification> getAllNotifications()
     {
-        notifications.add(notification);
+        return notificationRepository.findAll();
     }
 
-    public void markNotificationAsRead(Long id)
+    public Notification addNotification(Notification notification)
     {
-        notifications.stream()
-                .filter(notification -> notification.getId().equals(id))
-                .forEach(Notification::markAsRead);
+        return notificationRepository.save(notification);
     }
+
+//    public void markNotificationAsRead()
+//    {
+//        List readNotifications = getAllNotifications();
+//        for (Object n : readNotifications)
+//        {
+//
+//        }
+//    }
 
     @Autowired
     private JavaMailSender mailSender;
+
     public void setNotificationsEmail(String toEmail, String subject, String body)
     {
         SimpleMailMessage message = new SimpleMailMessage();

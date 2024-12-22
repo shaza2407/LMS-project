@@ -21,14 +21,18 @@ public class NotificationController
     @GetMapping
     public ResponseEntity<List<Notification>> getAllNotifications(String role)
     {
-        List<Notification> notification = notificationService.getAllNotifications(role);
-        return ResponseEntity.ok(notification);
+        List<Notification> notifications = notificationService.getAllNotifications();
+        for(int i = 0 ; i < notifications.size() ; i++)
+        {
+            notifications.get(i).markAsRead();
+        }
+        return ResponseEntity.ok(notifications);
     }
 
     @GetMapping("/unread")
     public ResponseEntity<List<Notification>> getAllUnreadNotifications(String role)
     {
-        List<Notification> allNotification = notificationService.getAllNotifications(role);
+        List<Notification> allNotification = notificationService.getAllNotifications();
         List<Notification> UnreadNotification = new ArrayList<>();
         for (Notification n : allNotification)
         {
