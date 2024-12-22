@@ -23,8 +23,8 @@ public class CourseController {
     private AttendanceService attendanceService;
 
     // Endpoint for enrolling a student in a course
-//    @RolesAllowed({"STUDENT"})
     @PostMapping("/{courseId}/enroll")
+    @RolesAllowed({"STUDENT"})
     public ResponseEntity<String> enrollStudent(
             @PathVariable Long courseId,
             @RequestParam Long studentId) {

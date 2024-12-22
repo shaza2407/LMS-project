@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -21,7 +22,6 @@ public class Assessment {
     @ManyToOne
     @JoinColumn(name = "course_id", nullable = false)
     private Course course;
-
     private String title;
 
     @Enumerated(EnumType.STRING)
@@ -32,5 +32,8 @@ public class Assessment {
     @Column(length = 2000)
     private String description;
 
-    private boolean graded; // For tracking if the assessment has been graded
+    private boolean graded;
+
+    @OneToMany(mappedBy = "assessment", cascade = CascadeType.ALL)
+    private List<Question> questions; // Questions for quizzes
 }

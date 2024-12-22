@@ -24,4 +24,6 @@ public class Course {
     @OneToMany(mappedBy = "course")
     private List<Lesson> lessons;
 
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
+    private List<Question> questionBank; // All questions for this course
 }
