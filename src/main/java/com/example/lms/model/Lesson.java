@@ -22,6 +22,7 @@ public class Lesson {
 
     private String title;
     private String mediaPath; // URL or file path for videos, PDFs, etc.
+
     private LocalDateTime startTime;
     private LocalDateTime endTime;
     private String otp; // OTP for attendance validation

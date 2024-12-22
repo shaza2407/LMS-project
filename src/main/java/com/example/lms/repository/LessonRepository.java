@@ -14,4 +14,6 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
 
     // Find lessons by title containing a keyword (for search functionality)
     List<Lesson> findByTitleContaining(String keyword);
+
+    List<Lesson> findByCourseId(Long courseId);
 }

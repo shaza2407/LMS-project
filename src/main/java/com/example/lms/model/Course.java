@@ -1,10 +1,18 @@
 package com.example.lms.model;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
-@Data
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 @Entity
 public class Course {
     @Id
@@ -17,13 +25,18 @@ public class Course {
     @ManyToOne
     private User instructor;
 
-
     @OneToMany(mappedBy = "course")
     private List<Enrollment> enrollments;
 
     @OneToMany(mappedBy = "course")
     private List<Lesson> lessons;
 
-    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
-    private List<Question> questionBank; // All questions for this course
+    @OneToMany(mappedBy = "course")
+    private List<Assessment> assignments;
+
+    @OneToMany(mappedBy = "course")
+    private List<Question> questionBanks;
+
+    @OneToMany(mappedBy = "course")
+    private List<Quiz> quizzes;
 }

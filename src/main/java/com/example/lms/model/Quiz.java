@@ -1,36 +1,33 @@
 package com.example.lms.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Assessment {
+public class Quiz {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    private String title;
 
     @ManyToOne
     @JoinColumn(name = "course_id", nullable = false)
     private Course course;
 
-    private String title;
 
-    @Enumerated(EnumType.STRING)
-    private AssessmentType type; // QUIZ or ASSIGNMENT
-
-    private LocalDateTime deadline;
-
-    @Column(length = 2000)
-    private String description;
-
-    private boolean graded; // For tracking if the assessment has been graded
+    @OneToMany(mappedBy = "quiz")
+    private List<Question> questions;
 }
+
