@@ -26,6 +26,7 @@ public class CourseController {
     private CourseService courseService;
 
     // Endpoint for enrolling a student in a course
+    @RolesAllowed({"STUDENT"})
     @PostMapping("/{courseId}/enroll")
     public ResponseEntity<String> enrollStudent(
             @PathVariable Long courseId,
@@ -35,6 +36,7 @@ public class CourseController {
     }
 
     // Endpoint for attending a lesson via OTP
+    @RolesAllowed({"STUDENT"})
     @PostMapping("/{courseId}/lessons/{lessonId}/attend")
     public ResponseEntity<String> attendLesson(
             @PathVariable Long courseId,

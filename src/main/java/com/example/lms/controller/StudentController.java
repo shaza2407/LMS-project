@@ -21,6 +21,7 @@ public class StudentController {
     private final AssessmentService assessmentService;
     private final SubmissionService submissionService;
 
+    @RolesAllowed({"STUDENT"})
     @GetMapping("/{studentId}/courses/{courseId}/assessments")
     public ResponseEntity<List<Assessment>> getAssessments(
             @PathVariable Long studentId,
@@ -44,8 +45,6 @@ public class StudentController {
     }
 
 
-
-
     @RolesAllowed({"STUDENT"})
     @PostMapping("/assessments/submit")
     public ResponseEntity<String> submitAssignment(
@@ -60,6 +59,7 @@ public class StudentController {
         }
     }
 
+    @RolesAllowed({"STUDENT"})
     @GetMapping("/{studentId}/grades")
     public ResponseEntity<List<Submission>> getGrades(@PathVariable Long studentId) {
         List<Submission> submissions = submissionService.getSubmissionsByStudent(studentId);

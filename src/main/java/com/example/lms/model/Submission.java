@@ -1,5 +1,6 @@
 package com.example.lms.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,6 +26,7 @@ public class Submission {
 
     @ManyToOne
     @JoinColumn(name = "student_id", nullable = false)
+
     private User student;
 
     private String filePath; // For assignment submissions

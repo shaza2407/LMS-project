@@ -4,6 +4,7 @@ import com.example.lms.model.Assessment;
 import com.example.lms.model.Submission;
 import com.example.lms.service.AssessmentService;
 import com.example.lms.service.SubmissionService;
+import jakarta.annotation.security.RolesAllowed;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,13 +26,14 @@ public class InstructorController {
 //        Assessment createdAssessment = assessmentService.createAssessment(instructorId, courseId, assessment);
 //        return ResponseEntity.ok(createdAssessment);
 //    }
-
+    @RolesAllowed({"INSTRUCTOR"})
     @GetMapping("/assessments/{assessmentId}/submissions")
     public ResponseEntity<List<Submission>> getSubmissions(@PathVariable Long assessmentId) {
         List<Submission> submissions = submissionService.getSubmissionsForAssessment(assessmentId);
         return ResponseEntity.ok(submissions);
     }
 
+    @RolesAllowed({"INSTRUCTOR"})
     @PutMapping("/submissions/{submissionId}/grade")
     public ResponseEntity<Submission> gradeSubmission(
             @PathVariable Long submissionId,
@@ -40,5 +42,7 @@ public class InstructorController {
         Submission gradedSubmission = submissionService.gradeSubmission(submissionId, grade, feedback);
         return ResponseEntity.ok(gradedSubmission);
     }
+
+
 }
 
