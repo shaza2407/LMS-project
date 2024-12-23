@@ -24,10 +24,11 @@ public class Quiz {
 
     @ManyToOne
     @JoinColumn(name = "course_id", nullable = false)
+    @JsonIgnore
     private Course course;
 
 
-    @OneToMany(mappedBy = "quiz")
+    @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL)
     private List<Question> questions;
 }
 

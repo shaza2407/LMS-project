@@ -88,21 +88,21 @@ public class CourseController {
         return ResponseEntity.ok(addedAssignment);
     }
 
-    // Endpoint for adding question bank to a course (Instructor)
-    @PostMapping("/{courseId}/content/questionbank")
-    public ResponseEntity<Question> addQuestionToCourse(
-            @PathVariable Long courseId,
-            @RequestBody Question questionBank) {
-        Question addedQuestionBank = courseService.addQuestionToCourse(courseId, questionBank);
-        return ResponseEntity.ok(addedQuestionBank);
-    }
-
-    // Endpoint for adding a quiz to a course (Instructor)
-    @PostMapping("/{courseId}/content/quizzes")
-    public ResponseEntity<Quiz> addQuizToCourse(@PathVariable Long courseId, @RequestBody Quiz quiz) {
-        Quiz addedQuiz = courseService.addQuizToCourse(courseId, quiz);
-        return ResponseEntity.ok(addedQuiz);
-    }
+//    // Endpoint for adding question bank to a course (Instructor)
+//    @PostMapping("/{courseId}/content/questionbank")
+//    public ResponseEntity<Question> addQuestionToCourse(
+//            @PathVariable Long courseId,
+//            @RequestBody Question questionBank) {
+//        Question addedQuestionBank = courseService.addQuestionToCourse(courseId, questionBank);
+//        return ResponseEntity.ok(addedQuestionBank);
+//    }
+//
+//    // Endpoint for adding a quiz to a course (Instructor)
+//    @PostMapping("/{courseId}/content/quizzes")
+//    public ResponseEntity<Quiz> addQuizToCourse(@PathVariable Long courseId, @RequestBody Quiz quiz) {
+//        Quiz addedQuiz = courseService.addQuizToCourse(courseId, quiz);
+//        return ResponseEntity.ok(addedQuiz);
+//    }
 
 
     // Endpoint to get all courses

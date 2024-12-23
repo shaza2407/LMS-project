@@ -1,6 +1,7 @@
 package com.example.lms.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,15 +14,20 @@ import java.util.List;
 public class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
     private Long id;
 
-    private String content, answer;
+    private String content;
+    @JsonIgnore
+    private String  answer;
 
     @ManyToOne
     @JoinColumn(name = "course_id")
+    @JsonIgnore
     private Course course;
 
     @ManyToOne
     @JoinColumn(name = "quiz_id")
+    @JsonIgnore
     private Quiz quiz;
 }

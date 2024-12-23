@@ -1,10 +1,9 @@
 package com.example.lms.controller;
 
-import com.example.lms.model.Assessment;
-import com.example.lms.model.Attendance;
-import com.example.lms.model.Submission;
+import com.example.lms.model.*;
 import com.example.lms.service.AssessmentService;
 import com.example.lms.service.AttendanceService;
+import com.example.lms.service.CourseService;
 import com.example.lms.service.SubmissionService;
 import jakarta.annotation.security.RolesAllowed;
 import lombok.AllArgsConstructor;
@@ -20,6 +19,8 @@ public class InstructorController {
     private final AssessmentService assessmentService;
     private final SubmissionService submissionService;
     private final AttendanceService attendanceService;
+
+    private final CourseService courseService;
 //    @PostMapping("/{instructorId}/courses/{courseId}/assessments")
 //    public ResponseEntity<Assessment> createAssessment(
 //            @PathVariable Long instructorId,
@@ -51,6 +52,26 @@ public class InstructorController {
         List<Attendance> attendanceRecords = attendanceService.getAttendanceForCourse(courseId);
         return ResponseEntity.ok(attendanceRecords);
     }
+
+    // Endpoint for adding a question bank to a course
+    @PostMapping("/{courseId}/content/questionbank")
+    public ResponseEntity<Question> addQuestionToCourse(
+            @PathVariable Long courseId,
+            @RequestBody Question questionBank) {
+        Question addedQuestion = courseService.addQuestionToCourse(courseId, questionBank);
+        return ResponseEntity.ok(addedQuestion);
+    }
+
+    // Endpoint for adding a quiz to a course
+    @PostMapping("/{courseId}/content/quizzes")
+    public ResponseEntity<Quiz> addQuizToCourse(
+            @PathVariable Long courseId,
+            @RequestBody Quiz quiz,
+            @RequestParam int numberOfQuestions) {
+        Quiz addedQuiz = courseService.addQuizToCourse(courseId, quiz, numberOfQuestions);
+        return ResponseEntity.ok(addedQuiz);
+    }
+
 
 }
 

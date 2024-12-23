@@ -65,5 +65,7 @@ public class StudentController {
         List<Submission> submissions = submissionService.getSubmissionsByStudent(studentId);
         return ResponseEntity.ok(submissions);
     }
+
+
 }
 
