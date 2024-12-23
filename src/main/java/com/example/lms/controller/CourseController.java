@@ -1,23 +1,30 @@
 package com.example.lms.controller;
 import com.example.lms.model.*;
+import com.example.lms.repository.UserRepository;
 import com.example.lms.service.CourseService;
 import com.example.lms.service.EnrollmentService;
+import com.example.lms.service.UserService;
 import jakarta.annotation.security.RolesAllowed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/instructors/courses")
 public class CourseController {
 
-    @Autowired
-    private EnrollmentService enrollmentService;
 
     @Autowired
     private CourseService courseService;
 
+    @Autowired
+    private EnrollmentService enrollmentService;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private UserRepository userRepository;
 
     // enroll student in a course
     @RolesAllowed({"STUDENT"})
@@ -35,6 +42,25 @@ public class CourseController {
         Course createdCourse = courseService.createCourse(course);
         return ResponseEntity.ok(createdCourse);
     }
+
+//    //create new course
+//    @RolesAllowed({"INSTRUCTOR"})
+//    @PostMapping("/createCourse")
+//
+//    public ResponseEntity<Course> createCourse(@PathVariable Long instructorId, @RequestBody Course course) {
+////        // Find the instructor by ID
+////        User instructor = userService.findById(course.getInstructor().getId());
+////
+////        if (instructor == null || !instructor.getRole().equals("INSTRUCTOR")) {
+////            return ResponseEntity.badRequest().body(null);  // You can customize the error response
+////        }
+//
+//        User user = userRepository.findById(instructorId)
+//                .orElseThrow(() -> new RuntimeException("user not found"));
+//        course.setInstructor(user);
+////        course createdCourse = courseService.createCourse(course);
+//        return ResponseEntity.ok(course);
+//    }
 
     // update course details
     @RolesAllowed({"INSTRUCTOR","ADMIN"})

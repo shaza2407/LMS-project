@@ -25,6 +25,8 @@ public class Course {
     private int duration; // in weeks
 
     @ManyToOne
+    @JoinColumn(name = "instructor_id")
+    @JsonIgnore
     private User instructor;
 
     @OneToMany(mappedBy = "course")
