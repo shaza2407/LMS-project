@@ -20,7 +20,8 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class SubmissionService {
+public class SubmissionService
+{
     private final SubmissionRepository submissionRepository;
     private final AssessmentRepository assessmentRepository;
     private final UserRepository userRepository;
@@ -29,18 +30,21 @@ public class SubmissionService {
     NotificationService notificationService;
 
     // View submissions for an assessment(by instructor)
-    public List<Submission> getSubmissionsForAssessment(Long assessmentId) {
+    public List<Submission> getSubmissionsForAssessment(Long assessmentId)
+    {
         return submissionRepository.findByAssessmentId(assessmentId);
     }
 
     // Grade a submission
-    public Submission gradeSubmission(Long submissionId, Double grade, String feedback) {
+    public Submission gradeSubmission(Long submissionId, Double grade, String feedback)
+    {
         Submission submission = submissionRepository.findById(submissionId)
                 .orElseThrow(() -> new RuntimeException("Submission not found"));
         submission.setGrade(grade);
         submission.setFeedback(feedback);
         User STUDENT = submission.getStudent();
-        if (STUDENT != null) {
+        if (STUDENT != null)
+        {
             String message = "Student " + STUDENT.getName() + " grade in " + submission.getAssessment().getTitle() + " is " + submission.getGrade();
             Notification notification = new Notification(
                     message,
@@ -49,22 +53,29 @@ public class SubmissionService {
             );
             notificationService.addNotification(notification); // Save notification
         }
+
+        String body = "Your grade in " + submission.getAssessment().getTitle() + " is " + submission.getGrade();
+        notificationService.setNotificationsEmail(STUDENT.getEmail(), "Grades", body);
+
+
         return submissionRepository.save(submission);
 
     }
 
 
-
     // By student
-    public String submitAssignment(Long studentId, Long assessmentId, MultipartFile file) {
-        try {
+    public String submitAssignment(Long studentId, Long assessmentId, MultipartFile file)
+    {
+        try
+        {
             System.out.println("Submitting assignment for studentId: " + studentId);
             System.out.println("For assessmentId: " + assessmentId);
             System.out.println("File name: " + file.getOriginalFilename());
             Assessment assessment = assessmentRepository.findById(assessmentId)
                     .orElseThrow(() -> new RuntimeException("Assessment not found"));
             System.out.println("Assessment fetched successfully.");
-            if (assessment.getType() != AssessmentType.ASSIGNMENT) {
+            if (assessment.getType() != AssessmentType.ASSIGNMENT)
+            {
                 throw new RuntimeException("This assessment is not an assignment");
             }
             System.out.println("Assessment type is valid.");
@@ -82,26 +93,31 @@ public class SubmissionService {
             submissionRepository.save(submission);
             System.out.println("Submission saved successfully.");
             return "Assignment submitted successfully!";
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
             System.err.println("Error during assignment submission: " + e.getMessage());
             throw new RuntimeException("Error during assignment submission: " + e.getMessage(), e);
         }
     }
 
 
-    private String saveFile(MultipartFile file) {
-        try {
+    private String saveFile(MultipartFile file)
+    {
+        try
+        {
             String fileName = file.getOriginalFilename();
             Path path = Paths.get("uploads/" + fileName);
             Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
             return path.toString();
-        } catch (IOException e) {
+        } catch (IOException e)
+        {
             throw new RuntimeException("File upload failed", e);
         }
     }
 
 
-    public List<Submission> getSubmissionsByStudent(Long studentId) {
+    public List<Submission> getSubmissionsByStudent(Long studentId)
+    {
         return submissionRepository.findByStudentId(studentId);
     }
 }

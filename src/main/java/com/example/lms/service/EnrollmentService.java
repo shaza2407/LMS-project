@@ -52,7 +52,12 @@ public class EnrollmentService
                     Instructor // Sender
             );
             notificationService.addNotification(notification); // Save notification
+
+            String body = "Student " + student.getName() + " has enrolled in your course: " + course.getTitle();
+            notificationService.setNotificationsEmail(Instructor.getEmail(), "Course enrollment", body);
         }
+
+
 
         User STUDENT = course.getInstructor();
         if (STUDENT != null) {
@@ -65,6 +70,8 @@ public class EnrollmentService
             notificationService.addNotification(notification); // Save notification
         }
 
+        String body = "Enrolled in " + course.getTitle() + " successfully" + course.getTitle();
+        notificationService.setNotificationsEmail(STUDENT.getEmail(), "Course enrollment", body);
 
         return "Student successfully enrolled in the course";
     }
