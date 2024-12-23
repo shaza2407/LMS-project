@@ -4,6 +4,7 @@ import com.example.lms.model.Assessment;
 import com.example.lms.model.Submission;
 import com.example.lms.service.AssessmentService;
 import com.example.lms.service.SubmissionService;
+import jakarta.annotation.security.RolesAllowed;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,22 +44,20 @@ public class StudentController {
     }
 
 
-//    @PostMapping("/{studentId}/assessments/{assessmentId}/submit")
-//    public ResponseEntity<String> submitAssignment(
-//            @PathVariable Long studentId,
-//            @PathVariable Long assessmentId,
-//            @RequestParam String filePath) {
-//        String response = submissionService.submitAssignment(studentId, assessmentId, filePath);
-//        return ResponseEntity.ok(response);
-//    }
 
-    @PostMapping("/{studentId}/assessments/{assessmentId}/submit")
+
+    @RolesAllowed({"STUDENT"})
+    @PostMapping("/assessments/submit")
     public ResponseEntity<String> submitAssignment(
-            @PathVariable Long studentId,
-            @PathVariable Long assessmentId,
-            @RequestParam("file") MultipartFile file) {
-        String response = submissionService.submitAssignment(studentId, assessmentId, file);
-        return ResponseEntity.ok(response);
+            @RequestParam Long studentId,
+            @RequestParam Long assessmentId,
+            @RequestParam("File") MultipartFile file) {
+        try {
+            String response = submissionService.submitAssignment(studentId, assessmentId, file);
+            return ResponseEntity.ok(response);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: " + e.getMessage());
+        }
     }
 
     @GetMapping("/{studentId}/grades")
