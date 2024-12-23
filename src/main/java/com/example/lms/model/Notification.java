@@ -1,9 +1,6 @@
 package com.example.lms.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,22 +14,27 @@ public class Notification
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String recipientRole; // "STUDENT", "INSTRUCTOR", etc.
+//    private String recipientRole; // "STUDENT", "INSTRUCTOR", etc.
     private String message;
     private boolean isRead;
     private LocalDateTime timestamp;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "sender_id", nullable = false)
+    private User sender;
 
-    public Notification(String recipientRole, String message, LocalDateTime timestamp)
+    public Notification(String message, LocalDateTime timestamp, User sender)
     {
-        this.recipientRole = recipientRole;
+//        this.recipientRole = recipientRole;
         this.message = message;
         this.isRead = false;
         this.timestamp = timestamp;
+        this.sender = sender;
     }
 
     public Notification()
     {
     }
+
 
 
     public boolean isRead()

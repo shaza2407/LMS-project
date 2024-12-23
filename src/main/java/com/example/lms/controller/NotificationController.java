@@ -21,6 +21,7 @@ public class NotificationController
     @GetMapping
     public ResponseEntity<List<Notification>> getAllNotifications(String role)
     {
+
         List<Notification> notifications = notificationService.getAllNotifications();
         for(int i = 0 ; i < notifications.size() ; i++)
         {
