@@ -50,5 +50,10 @@ public class UserService {
         response.put("user", foundUser);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    public User findById(Long id) {
+        return userRepository.findById(id).orElse(null);  // Return null if not found
 }
+}
+
 
