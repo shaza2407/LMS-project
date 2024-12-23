@@ -16,7 +16,9 @@ public class AttendanceController {
     @Autowired
     private AttendanceService attendanceService;
 
-    // Endpoint for generating OTP (Instructor role)
+    //controller to control attending lessons
+
+    // instructor generating OTP
     @RolesAllowed({"INSTRUCTOR"})
     @PostMapping("/generate-otp/{lessonId}")
     public ResponseEntity<String> generateOtp(@PathVariable Long lessonId) {
@@ -24,7 +26,8 @@ public class AttendanceController {
         return ResponseEntity.ok("OTP for the lesson: " + otp);
     }
 
-    // Endpoint for attending a lesson (Student role)
+
+    //student attend to lesson
     @RolesAllowed({"STUDENT"})
     @PostMapping("/attend/{lessonId}")
     public ResponseEntity<String> attendLesson(
@@ -34,15 +37,4 @@ public class AttendanceController {
         String response = attendanceService.attendLesson(lessonId, studentId, otp);
         return ResponseEntity.ok(response);
     }
-//    Endpoint for attending a lesson via OTP
-//    @PostMapping("/{courseId}/lessons/{lessonId}/attend")
-//    public ResponseEntity<String> attendLesson(
-//            @PathVariable Long courseId,
-//            @PathVariable Long lessonId,
-//            @RequestParam Long studentId,
-//            @RequestParam String otp) {
-//        String response = attendanceService.attendLesson(lessonId, studentId, otp);
-//        return ResponseEntity.ok(response);
-//    }
-
 }

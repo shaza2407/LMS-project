@@ -1,10 +1,7 @@
 package com.example.lms.controller;
 
 import com.example.lms.model.*;
-import com.example.lms.service.AssessmentService;
-import com.example.lms.service.AttendanceService;
-import com.example.lms.service.CourseService;
-import com.example.lms.service.SubmissionService;
+import com.example.lms.service.*;
 import jakarta.annotation.security.RolesAllowed;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,23 +16,24 @@ public class InstructorController {
     private final AssessmentService assessmentService;
     private final SubmissionService submissionService;
     private final AttendanceService attendanceService;
-
     private final CourseService courseService;
-//    @PostMapping("/{instructorId}/courses/{courseId}/assessments")
-//    public ResponseEntity<Assessment> createAssessment(
-//            @PathVariable Long instructorId,
-//            @PathVariable Long courseId,
-//            @RequestBody Assessment assessment) {
-//        Assessment createdAssessment = assessmentService.createAssessment(instructorId, courseId, assessment);
-//        return ResponseEntity.ok(createdAssessment);
-//    }
+    private final QuizService quizService;
+
+
+
+    //assignment:
+    //create assignment
     @RolesAllowed({"INSTRUCTOR"})
-    @GetMapping("/assessments/{assessmentId}/submissions")
-    public ResponseEntity<List<Submission>> getSubmissions(@PathVariable Long assessmentId) {
-        List<Submission> submissions = submissionService.getSubmissionsForAssessment(assessmentId);
-        return ResponseEntity.ok(submissions);
+    @PostMapping("/{instructorId}/courses/{courseId}/assessments")
+    public ResponseEntity<Assessment> createAssessment(
+            @PathVariable Long instructorId,
+            @PathVariable Long courseId,
+            @RequestBody Assessment assessment) {
+        Assessment createdAssessment = assessmentService.createAssessment(instructorId, courseId, assessment);
+        return ResponseEntity.ok(createdAssessment);
     }
 
+    //grade students assignment
     @RolesAllowed({"INSTRUCTOR"})
     @PutMapping("/submissions/{submissionId}/grade")
     public ResponseEntity<Submission> gradeSubmission(
@@ -46,14 +44,10 @@ public class InstructorController {
         return ResponseEntity.ok(gradedSubmission);
     }
 
-    //@RolesAllowed({"INSTRUCTOR"})
-    @GetMapping("/courses/{courseId}/attendance")
-    public ResponseEntity<List<Attendance>> getAttendance(@PathVariable Long courseId) {
-        List<Attendance> attendanceRecords = attendanceService.getAttendanceForCourse(courseId);
-        return ResponseEntity.ok(attendanceRecords);
-    }
 
-    // Endpoint for adding a question bank to a course
+    //Quizes:
+    //add question to course question bank
+    @RolesAllowed({"INSTRUCTOR"})
     @PostMapping("/{courseId}/content/questionbank")
     public ResponseEntity<Question> addQuestionToCourse(
             @PathVariable Long courseId,
@@ -62,8 +56,9 @@ public class InstructorController {
         return ResponseEntity.ok(addedQuestion);
     }
 
-    // Endpoint for adding a quiz to a course
-    @PostMapping("/{courseId}/content/quizzes")
+    // create quiz
+    @RolesAllowed({"INSTRUCTOR"})
+    @PostMapping("/{courseId}/content/quizes")
     public ResponseEntity<Quiz> addQuizToCourse(
             @PathVariable Long courseId,
             @RequestBody Quiz quiz,
@@ -72,6 +67,32 @@ public class InstructorController {
         return ResponseEntity.ok(addedQuiz);
     }
 
+
+
+    //tracking
+    //track assignment submissions
+    @RolesAllowed({"INSTRUCTOR"})
+    @GetMapping("/assessments/{assessmentId}/submissions")
+    public ResponseEntity<List<Submission>> getSubmissions(@PathVariable Long assessmentId) {
+        List<Submission> submissions = submissionService.getSubmissionsForAssessment(assessmentId);
+        return ResponseEntity.ok(submissions);
+    }
+
+    //track lessons attendance
+    @RolesAllowed({"INSTRUCTOR"})
+    @GetMapping("/courses/{courseId}/attendance")
+    public ResponseEntity<List<Attendance>> getAttendance(@PathVariable Long courseId) {
+        List<Attendance> attendanceRecords = attendanceService.getAttendanceForCourse(courseId);
+        return ResponseEntity.ok(attendanceRecords);
+    }
+
+    //track quiz submissions
+    @RolesAllowed({"INSTRUCTOR"})
+    @GetMapping("/quizzes/{quizId}/submissions")
+    public ResponseEntity<List<QuizAttempt>> getQuizSubmissions(@PathVariable Long quizId) {
+        List<QuizAttempt> quizAttempts = quizService.getQuizSubmissionsForQuiz(quizId);
+        return ResponseEntity.ok(quizAttempts);
+    }
 
 }
 

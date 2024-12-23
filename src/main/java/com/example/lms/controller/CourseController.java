@@ -1,16 +1,12 @@
 package com.example.lms.controller;
-
 import com.example.lms.model.*;
-import com.example.lms.service.AttendanceService;
 import com.example.lms.service.CourseService;
 import com.example.lms.service.EnrollmentService;
 import jakarta.annotation.security.RolesAllowed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/instructors/courses")
@@ -20,41 +16,28 @@ public class CourseController {
     private EnrollmentService enrollmentService;
 
     @Autowired
-    private AttendanceService attendanceService;
-
-    @Autowired
     private CourseService courseService;
 
-    // Endpoint for enrolling a student in a course
+
+    // enroll student in a course
     @RolesAllowed({"STUDENT"})
     @PostMapping("/{courseId}/enroll")
-    public ResponseEntity<String> enrollStudent(
-            @PathVariable Long courseId,
-            @RequestParam Long studentId) {
+    public ResponseEntity<String> enrollStudent(@PathVariable Long courseId, @RequestParam Long studentId) {
         String response = enrollmentService.enrollStudent(courseId, studentId);
         return ResponseEntity.ok(response);
     }
 
-    // Endpoint for attending a lesson via OTP
-    @RolesAllowed({"STUDENT"})
-    @PostMapping("/{courseId}/lessons/{lessonId}/attend")
-    public ResponseEntity<String> attendLesson(
-            @PathVariable Long courseId,
-            @PathVariable Long lessonId,
-            @RequestParam Long studentId,
-            @RequestParam String otp) {
-        String response = attendanceService.attendLesson(lessonId, studentId, otp);
-        return ResponseEntity.ok(response);
-    }
 
-    // Endpoint for creating a new course (Admin/Instructor)
+    //create new course
+    @RolesAllowed({"INSTRUCTOR"})
     @PostMapping("/createCourse")
     public ResponseEntity<Course> createCourse(@RequestBody Course course) {
         Course createdCourse = courseService.createCourse(course);
         return ResponseEntity.ok(createdCourse);
     }
 
-    // Endpoint for updating course details (Admin/Instructor)
+    // update course details
+    @RolesAllowed({"INSTRUCTOR","ADMIN"})
     @PutMapping("/{courseId}/update")
     public ResponseEntity<Course> updateCourse(
             @PathVariable Long courseId,
@@ -63,14 +46,16 @@ public class CourseController {
         return ResponseEntity.ok(updatedCourse);
     }
 
-    // Endpoint for deleting a course (Admin/Instructor)
+    //deleting a course
+    @RolesAllowed({"INSTRUCTOR","ADMIN"})
     @DeleteMapping("/{courseId}/delete")
     public ResponseEntity<String> deleteCourse(@PathVariable Long courseId) {
         courseService.deleteCourse(courseId);
         return ResponseEntity.ok("Course deleted successfully");
     }
 
-    // Endpoint for adding lessons to a course (Instructor)
+    //adding lesson to course
+    @RolesAllowed({"INSTRUCTOR"})
     @PostMapping("/{courseId}/content/lessons")
     public ResponseEntity<Lesson> addLessonToCourse(
             @PathVariable Long courseId,
@@ -79,33 +64,8 @@ public class CourseController {
         return ResponseEntity.ok(addedLesson);
     }
 
-    // Endpoint for adding assignments to a course (Instructor)
-    @PostMapping("/{courseId}/content/assignments")
-    public ResponseEntity<Assessment> addAssignmentToCourse(
-            @PathVariable Long courseId,
-            @RequestBody Assessment assignment) {
-        Assessment addedAssignment = courseService.addAssignmentToCourse(courseId, assignment);
-        return ResponseEntity.ok(addedAssignment);
-    }
 
-//    // Endpoint for adding question bank to a course (Instructor)
-//    @PostMapping("/{courseId}/content/questionbank")
-//    public ResponseEntity<Question> addQuestionToCourse(
-//            @PathVariable Long courseId,
-//            @RequestBody Question questionBank) {
-//        Question addedQuestionBank = courseService.addQuestionToCourse(courseId, questionBank);
-//        return ResponseEntity.ok(addedQuestionBank);
-//    }
-//
-//    // Endpoint for adding a quiz to a course (Instructor)
-//    @PostMapping("/{courseId}/content/quizzes")
-//    public ResponseEntity<Quiz> addQuizToCourse(@PathVariable Long courseId, @RequestBody Quiz quiz) {
-//        Quiz addedQuiz = courseService.addQuizToCourse(courseId, quiz);
-//        return ResponseEntity.ok(addedQuiz);
-//    }
-
-
-    // Endpoint to get all courses
+    //to get the list of all courses
     @GetMapping("/getAllCourses")
     @RolesAllowed({"ADMIN", "INSTRUCTOR", "STUDENT"})
     public ResponseEntity<List<Course>> getAllCourses() {
@@ -113,7 +73,7 @@ public class CourseController {
         return ResponseEntity.ok(courses);
     }
 
-    // Endpoint to get all lessons for a specific course
+    //to get list of all lessons
     @GetMapping("/{courseId}/getAllLessons")
     @RolesAllowed({"ADMIN", "INSTRUCTOR", "STUDENT"})
     public ResponseEntity<List<Lesson>> getAllLessons(@PathVariable Long courseId) {
@@ -121,7 +81,7 @@ public class CourseController {
         return ResponseEntity.ok(lessons);
     }
 
-    // Endpoint to get a specific course by ID
+    // get course details by its id
     @GetMapping("/{courseId}/getCourse")
     @RolesAllowed({"ADMIN", "INSTRUCTOR", "STUDENT"})
     public ResponseEntity<Course> getCourseById(@PathVariable Long courseId) {

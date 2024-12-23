@@ -10,14 +10,13 @@ public class LessonService {
     @Autowired
     private LessonRepository lessonRepository;
 
+    //to generate otp to attend lesson
     public String generateOtpForLesson(Long lessonId) {
         Lesson lesson = lessonRepository.findById(lessonId)
                 .orElseThrow(() -> new RuntimeException("Lesson not found"));
-
-        String otp = String.valueOf((int) (Math.random() * 9000) + 1000); // Generate 4-digit OTP
-        lesson.setOtp(otp); // Save OTP in the lesson entity
+        String otp = String.valueOf((int) (Math.random() * 9000) + 1000);
+        lesson.setOtp(otp);
         lessonRepository.save(lesson);
-
         return otp;
     }
 }

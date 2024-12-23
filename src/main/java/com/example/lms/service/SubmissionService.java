@@ -40,31 +40,7 @@ public class SubmissionService {
         return submissionRepository.save(submission);
     }
 
-//// By student
-//    public String submitAssignment(Long studentId, Long assessmentId, String filePath) {
-//        // Fetch the assessment
-//        Assessment assessment = assessmentRepository.findById(assessmentId)
-//                .orElseThrow(() -> new RuntimeException("Assessment not found"));
-//
-//        // Ensure it's an assignment type
-//        if (assessment.getType() != AssessmentType.ASSIGNMENT) {
-//            throw new RuntimeException("This assessment is not an assignment");
-//        }
-//
-//        // Fetch the student entity
-//        User student = userRepository.findById(String.valueOf(studentId))
-//                .orElseThrow(() -> new RuntimeException("Student not found"));
-//
-//        // Create and save the submission
-//        Submission submission = new Submission();
-//        submission.setStudent(student);
-//        submission.setAssessment(assessment);
-//        submission.setFilePath(filePath);
-//        submission.setSubmittedOn(LocalDateTime.now());
-//
-//        submissionRepository.save(submission);
-//        return "Assignment submitted successfully!";
-//    }
+
 
     // By student
     public String submitAssignment(Long studentId, Long assessmentId, MultipartFile file) {
@@ -72,24 +48,17 @@ public class SubmissionService {
             System.out.println("Submitting assignment for studentId: " + studentId);
             System.out.println("For assessmentId: " + assessmentId);
             System.out.println("File name: " + file.getOriginalFilename());
-
-            // Fetch assessment
             Assessment assessment = assessmentRepository.findById(assessmentId)
                     .orElseThrow(() -> new RuntimeException("Assessment not found"));
             System.out.println("Assessment fetched successfully.");
-
-            // Ensure it's an assignment type
             if (assessment.getType() != AssessmentType.ASSIGNMENT) {
                 throw new RuntimeException("This assessment is not an assignment");
             }
             System.out.println("Assessment type is valid.");
-
-            // Fetch student entity
             User student = userRepository.findById(String.valueOf(studentId))
                     .orElseThrow(() -> new RuntimeException("Student not found"));
             System.out.println("Student fetched successfully.");
 
-            // Create and save the submission
             Submission submission = new Submission();
             submission.setStudent(student);
             submission.setAssessment(assessment);
@@ -106,17 +75,17 @@ public class SubmissionService {
         }
     }
 
+
     private String saveFile(MultipartFile file) {
         try {
             String fileName = file.getOriginalFilename();
             Path path = Paths.get("uploads/" + fileName);
             Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
-            return path.toString(); // Return the file path or URL
+            return path.toString();
         } catch (IOException e) {
             throw new RuntimeException("File upload failed", e);
         }
     }
-
 
 
     public List<Submission> getSubmissionsByStudent(Long studentId) {

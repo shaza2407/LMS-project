@@ -21,30 +21,26 @@ public class StudentController {
     private final AssessmentService assessmentService;
     private final SubmissionService submissionService;
 
+    //get assignment
     @RolesAllowed({"STUDENT"})
     @GetMapping("/{studentId}/courses/{courseId}/assessments")
     public ResponseEntity<List<Assessment>> getAssessments(
             @PathVariable Long studentId,
             @PathVariable Long courseId) {
         try {
-            // Call the service to get assessments
             List<Assessment> assessments = assessmentService.getAssessmentsForStudent(studentId, courseId);
-
-            // Return the assessments in the response
             return ResponseEntity.ok(assessments);
         } catch (IllegalArgumentException e) {
-            // Handle the case when the student is not enrolled
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
         } catch (NoSuchElementException e) {
-            // Handle the case when no assessments are found
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         } catch (Exception e) {
-            // Handle any other unexpected exceptions
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
 
+    //submit assignment
     @RolesAllowed({"STUDENT"})
     @PostMapping("/assessments/submit")
     public ResponseEntity<String> submitAssignment(
@@ -59,6 +55,8 @@ public class StudentController {
         }
     }
 
+
+    //get assignment grade
     @RolesAllowed({"STUDENT"})
     @GetMapping("/{studentId}/grades")
     public ResponseEntity<List<Submission>> getGrades(@PathVariable Long studentId) {

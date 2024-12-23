@@ -21,26 +21,21 @@ public class EnrollmentService {
 
     @Autowired
     private UserRepository userRepository;
+
+
     public String enrollStudent(Long courseId, Long studentId) {
-        // Fetch the course and student
         Course course = courseRepository.findById(courseId)
                 .orElseThrow(() -> new RuntimeException("Course not found"));
         User student = userRepository.findById(String.valueOf(studentId))
                 .orElseThrow(() -> new RuntimeException("Student not found"));
-
-        // Check if the user is already enrolled
         if (enrollmentRepository.existsByCourseAndStudent(course, student)) {
             return "Student is already enrolled in this course";
         }
-
-        // Save the enrollment
         Enrollment enrollment = new Enrollment();
         enrollment.setCourse(course);
         enrollment.setStudent(student);
         enrollment.setEnrolledOn(LocalDate.now());
-
         enrollmentRepository.save(enrollment);
-
         return "Student successfully enrolled in the course";
     }
 }

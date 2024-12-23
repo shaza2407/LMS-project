@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -30,6 +31,7 @@ public class QuizService {
         return quizRepository.findById(quizId).orElseThrow(() -> new RuntimeException("Quiz not found"));
     }
 
+
     public String submitQuiz(Long studentId, Long quizId, Map<Long, String> answers) {
         Quiz quiz = quizRepository.findById(quizId).orElseThrow(() -> new RuntimeException("Quiz not found"));
         User student = userRepository.findById(String.valueOf(studentId))
@@ -43,8 +45,6 @@ public class QuizService {
                 score++;
             }
         }
-
-        // Save quiz attempt
         QuizAttempt attempt = new QuizAttempt();
         attempt.setQuiz(quiz);
         attempt.setStudent(student);
@@ -52,7 +52,13 @@ public class QuizService {
         attempt.setScore(score);
         attempt.setAttemptDate(LocalDateTime.now());
         quizAttemptRepository.save(attempt);
-
         return "Quiz submitted successfully! Your score is: " + score + "/" + quiz.getQuestions().size();
     }
+
+
+    public List<QuizAttempt> getQuizSubmissionsForQuiz(Long quizId) {
+        Quiz quiz = quizRepository.findById(quizId).orElseThrow(() -> new RuntimeException("Quiz not found"));
+        return quizAttemptRepository.findByQuiz(quiz);
+    }
+
 }

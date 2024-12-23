@@ -14,11 +14,10 @@ import java.util.List;
 public class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonIgnore
     private Long id;
 
     private String content;
-    @JsonIgnore
+//    @JsonIgnore
     private String  answer;
 
     @ManyToOne
