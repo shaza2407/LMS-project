@@ -54,5 +54,8 @@ public class AttendanceService {
 
         return "Attendance marked successfully.";
     }
+    public List<Attendance> getAttendanceForCourse(Long courseId) {
+        return attendanceRepository.findByLessonCourseId(courseId);
+    }
 }
 

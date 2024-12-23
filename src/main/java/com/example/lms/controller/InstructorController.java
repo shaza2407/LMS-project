@@ -1,8 +1,10 @@
 package com.example.lms.controller;
 
 import com.example.lms.model.Assessment;
+import com.example.lms.model.Attendance;
 import com.example.lms.model.Submission;
 import com.example.lms.service.AssessmentService;
+import com.example.lms.service.AttendanceService;
 import com.example.lms.service.SubmissionService;
 import jakarta.annotation.security.RolesAllowed;
 import lombok.AllArgsConstructor;
@@ -17,7 +19,7 @@ import java.util.List;
 public class InstructorController {
     private final AssessmentService assessmentService;
     private final SubmissionService submissionService;
-
+    private final AttendanceService attendanceService;
 //    @PostMapping("/{instructorId}/courses/{courseId}/assessments")
 //    public ResponseEntity<Assessment> createAssessment(
 //            @PathVariable Long instructorId,
@@ -43,6 +45,12 @@ public class InstructorController {
         return ResponseEntity.ok(gradedSubmission);
     }
 
+    //@RolesAllowed({"INSTRUCTOR"})
+    @GetMapping("/courses/{courseId}/attendance")
+    public ResponseEntity<List<Attendance>> getAttendance(@PathVariable Long courseId) {
+        List<Attendance> attendanceRecords = attendanceService.getAttendanceForCourse(courseId);
+        return ResponseEntity.ok(attendanceRecords);
+    }
 
 }
 
