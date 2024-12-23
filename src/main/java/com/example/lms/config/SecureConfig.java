@@ -32,7 +32,7 @@ public class SecureConfig {
                         .requestMatchers("/api/users/**").permitAll()
                         .requestMatchers("/api/students/**").hasAnyRole(Role.STUDENT.name(), Role.ADMIN.name(),
                                 Role.INSTRUCTOR.name())
-                        .requestMatchers("/api/instructors/**").hasAnyRole(Role.INSTRUCTOR.name(), Role.ADMIN.name())
+                        .requestMatchers("/api/instructors/**").hasAnyRole(Role.INSTRUCTOR.name(), Role.ADMIN.name(),Role.STUDENT.name())
                         .requestMatchers("/api/admins/**").hasRole(Role.ADMIN.name())
                         .anyRequest().authenticated()
                 ).sessionManagement((session) -> session

@@ -20,7 +20,6 @@ public class Enrollment {
     private Long id;
 
     @ManyToOne
-    @JsonIgnore
     private Course course;
 
     @ManyToOne
