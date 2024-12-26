@@ -1,5 +1,6 @@
 package com.example.lms.controller;
 import com.example.lms.model.*;
+import com.example.lms.repository.UserRepository;
 import com.example.lms.service.CourseService;
 import com.example.lms.service.EnrollmentService;
 import com.example.lms.service.UserService;
@@ -23,6 +24,17 @@ public class CourseController {
     private EnrollmentService enrollmentService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private UserRepository userRepository;
+
+
+//    //create new course
+//    @RolesAllowed({"INSTRUCTOR"})
+//    @PostMapping("/createCourse")
+//    public ResponseEntity<Course> createCourse(@RequestBody Course course) {
+//        Course createdCourse = courseService.createCourse(course);
+//        return ResponseEntity.ok(createdCourse);
+//    }
 
     //create new course
     @RolesAllowed({"INSTRUCTOR"})
@@ -41,7 +53,7 @@ public class CourseController {
 
 
     // update course details
-    @RolesAllowed({"INSTRUCTOR", "ADMIN"})
+    @RolesAllowed({"INSTRUCTOR","ADMIN"})
     @PutMapping("/{courseId}/update")
     public ResponseEntity<Course> updateCourse(
             @PathVariable Long courseId,
@@ -57,7 +69,7 @@ public class CourseController {
     }
 
     //deleting a course
-    @RolesAllowed({"INSTRUCTOR", "ADMIN"})
+    @RolesAllowed({"INSTRUCTOR","ADMIN"})
     @DeleteMapping("/{courseId}/delete")
     public ResponseEntity<String> deleteCourse(@PathVariable Long courseId) {
         courseService.deleteCourse(courseId);
@@ -102,20 +114,5 @@ public class CourseController {
     public ResponseEntity<Course> getCourseById(@PathVariable Long courseId) {
         Course course = courseService.getCourseById(courseId);
         return course != null ? ResponseEntity.ok(course) : ResponseEntity.notFound().build();
-    }
-
-    //to get all students in specific course
-    @RolesAllowed({"INSTRUCTOR"})
-    @GetMapping("/{courseId}/enrolledStudents")
-    public ResponseEntity<List<User>> getEnrolledStudents(@PathVariable Long courseId) {
-        String instructorIdStr = SecurityContextHolder.getContext().getAuthentication().getName();
-        Long instructorId = Long.valueOf(instructorIdStr);
-        Course course = courseService.getCourseById(courseId);
-        if (course == null || !course.getInstructor().getId().equals(instructorId))
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        List<User> enrolledStudents = enrollmentService.getEnrolledStudents(courseId);
-        if (enrolledStudents.isEmpty())
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        return ResponseEntity.ok(enrolledStudents);
     }
 }
