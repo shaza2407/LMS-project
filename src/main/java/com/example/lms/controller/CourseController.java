@@ -27,15 +27,6 @@ public class CourseController {
     @Autowired
     private UserRepository userRepository;
 
-
-//    //create new course
-//    @RolesAllowed({"INSTRUCTOR"})
-//    @PostMapping("/createCourse")
-//    public ResponseEntity<Course> createCourse(@RequestBody Course course) {
-//        Course createdCourse = courseService.createCourse(course);
-//        return ResponseEntity.ok(createdCourse);
-//    }
-
     //create new course
     @RolesAllowed({"INSTRUCTOR"})
     @PostMapping("/createCourse")
@@ -115,4 +106,18 @@ public class CourseController {
         Course course = courseService.getCourseById(courseId);
         return course != null ? ResponseEntity.ok(course) : ResponseEntity.notFound().build();
     }
+    @RolesAllowed({"ADMIN", "INSTRUCTOR"})
+    @GetMapping("/{courseId}/enrolledStudents")
+    public ResponseEntity<List<User>> getEnrolledStudents(@PathVariable Long courseId) {
+        String instructorIdStr = SecurityContextHolder.getContext().getAuthentication().getName();
+        Long instructorId = Long.valueOf(instructorIdStr);
+        Course course = courseService.getCourseById(courseId);
+        if (course == null || !course.getInstructor().getId().equals(instructorId))
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        List<User> enrolledStudents = enrollmentService.getEnrolledStudents(courseId);
+        if (enrolledStudents.isEmpty())
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        return ResponseEntity.ok(enrolledStudents);
+    }
+
 }
