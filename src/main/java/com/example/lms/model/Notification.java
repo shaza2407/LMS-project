@@ -16,7 +16,7 @@ public class Notification
     private Long id;
 //    private String recipientRole; // "STUDENT", "INSTRUCTOR", etc.
     private String message;
-    private boolean isRead;
+    private boolean isRead = false;
     private LocalDateTime timestamp;
     @ManyToOne(fetch = FetchType.EAGER)  // Changed to EAGER
     @JoinColumn(name = "sender_id", nullable = false)
@@ -26,7 +26,6 @@ public class Notification
     {
 //        this.recipientRole = recipientRole;
         this.message = message;
-        this.isRead = false;
         this.timestamp = timestamp;
         this.sender = sender;
     }
@@ -45,7 +44,6 @@ public class Notification
 
     public void markAsRead()
     {
-
         this.isRead = true;
     }
 }

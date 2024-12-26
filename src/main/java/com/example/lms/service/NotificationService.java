@@ -29,14 +29,16 @@ public class NotificationService
         return notificationRepository.save(notification);
     }
 
-//    public void markNotificationAsRead()
-//    {
-//        List readNotifications = getAllNotifications();
-//        for (Object n : readNotifications)
-//        {
-//
-//        }
-//    }
+    public Notification markNotificationAsRead(long Id)
+    {
+        if(notificationRepository.existsById(Id))
+        {
+            Notification notification = notificationRepository.getById(Id);
+            notification.markAsRead();
+            return notification;
+        }
+        return null;
+    }
 
     @Autowired
     private JavaMailSender mailSender;

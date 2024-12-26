@@ -17,17 +17,26 @@ import java.util.List;
 public class NotificationController
 {
     private final NotificationService notificationService;
+
     // GET all users
     @GetMapping
     public List<Notification> getAllNotifications(String role)
     {
 
         List<Notification> notifications = notificationService.getAllNotifications();
-        for(int i = 0 ; i < notifications.size() ; i++)
-        {
-            notifications.get(i).markAsRead();
-        }
         return notifications;
+    }
+
+    @PostMapping("/{notificationId}/markAsRead")
+    public ResponseEntity<Void> markNotificationAsRead(@PathVariable Long notificationId)
+    {
+        Notification updatedNotification = notificationService.markNotificationAsRead(notificationId);
+
+        if (updatedNotification != null)
+        {
+            return ResponseEntity.ok().build();  // Return 200 OK if the notification was found and updated
+        }
+        return ResponseEntity.notFound().build();  // Return 404 if the notification was not found
     }
 
 
@@ -36,11 +45,10 @@ public class NotificationController
     {
         List<Notification> allNotification = notificationService.getAllNotifications();
         List<Notification> unreadNotification = new ArrayList<>();
-        for (int i = 0 ; i < allNotification.size() ; i++)
+        for (int i = 0; i < allNotification.size(); i++)
         {
-            if(!allNotification.get(i).isRead())
+            if (!allNotification.get(i).isRead())
             {
-                allNotification.get(i).markAsRead();
                 unreadNotification.add(allNotification.get(i));
             }
         }
