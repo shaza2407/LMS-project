@@ -106,6 +106,8 @@ public class CourseController {
         Course course = courseService.getCourseById(courseId);
         return course != null ? ResponseEntity.ok(course) : ResponseEntity.notFound().build();
     }
+
+    //get all enrolled students to specific course
     @RolesAllowed({"ADMIN", "INSTRUCTOR"})
     @GetMapping("/{courseId}/enrolledStudents")
     public ResponseEntity<List<User>> getEnrolledStudents(@PathVariable Long courseId) {

@@ -22,6 +22,7 @@ public class StudentController {
     private final EnrollmentService enrollmentService;
     private final CourseService courseService;
     private final UserService userService;
+
     //to get the list of all courses
     @GetMapping("/getAllCourses")
     @RolesAllowed({"STUDENT"})

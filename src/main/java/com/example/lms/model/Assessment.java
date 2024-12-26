@@ -23,7 +23,6 @@ public class Assessment {
     @JoinColumn(name = "course_id", nullable = false)
     @JsonIgnore
     private Course course;
-
     private String title;
 
     @Enumerated(EnumType.STRING)
