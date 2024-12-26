@@ -18,7 +18,7 @@ public class Notification
     private String message;
     private boolean isRead;
     private LocalDateTime timestamp;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)  // Changed to EAGER
     @JoinColumn(name = "sender_id", nullable = false)
     private User sender;
 

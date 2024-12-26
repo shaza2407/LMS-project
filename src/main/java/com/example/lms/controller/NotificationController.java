@@ -19,7 +19,7 @@ public class NotificationController
     private final NotificationService notificationService;
     // GET all users
     @GetMapping
-    public ResponseEntity<List<Notification>> getAllNotifications(String role)
+    public List<Notification> getAllNotifications(String role)
     {
 
         List<Notification> notifications = notificationService.getAllNotifications();
@@ -27,22 +27,24 @@ public class NotificationController
         {
             notifications.get(i).markAsRead();
         }
-        return ResponseEntity.ok(notifications);
+        return notifications;
     }
+
 
     @GetMapping("/unread")
     public ResponseEntity<List<Notification>> getAllUnreadNotifications(String role)
     {
         List<Notification> allNotification = notificationService.getAllNotifications();
-        List<Notification> UnreadNotification = new ArrayList<>();
-        for (Notification n : allNotification)
+        List<Notification> unreadNotification = new ArrayList<>();
+        for (int i = 0 ; i < allNotification.size() ; i++)
         {
-            if(!n.isRead())
+            if(!allNotification.get(i).isRead())
             {
-                UnreadNotification.add(n);
+                allNotification.get(i).markAsRead();
+                unreadNotification.add(allNotification.get(i));
             }
         }
-        return ResponseEntity.ok(UnreadNotification);
+        return ResponseEntity.ok(unreadNotification);
     }
 
     // Dummy Example for how to use mail service in service files
