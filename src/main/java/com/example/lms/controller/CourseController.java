@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/instructors/courses")
+@RequestMapping("/api/courses")
 public class CourseController {
 
 
@@ -38,14 +38,14 @@ public class CourseController {
 //    }
 
     //create new course
-    @RolesAllowed({"INSTRUCTOR"})
+    @RolesAllowed({"INSTRUCTOR", "ADMIN"})
     @PostMapping("/createCourse")
     public ResponseEntity<Course> createCourse(@RequestBody Course course) {
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
         User instructor = userService.findById(Long.valueOf(name));
-        if (instructor == null || instructor.getRole() != Role.INSTRUCTOR) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
+//        if (instructor == null || instructor.getRole() != Role.INSTRUCTOR) {
+//            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+//        }
         course.setInstructor(instructor);
         Course createdCourse = courseService.createCourse(course);
 
