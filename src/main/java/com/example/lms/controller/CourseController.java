@@ -19,7 +19,6 @@ public class CourseController {
 
     @Autowired
     private CourseService courseService;
-
     @Autowired
     private EnrollmentService enrollmentService;
     @Autowired
@@ -47,6 +46,12 @@ public class CourseController {
     public ResponseEntity<Course> updateCourse(
             @PathVariable Long courseId,
             @RequestBody Course course) {
+
+        String currentUserIdStr = SecurityContextHolder.getContext().getAuthentication().getName();
+        Long currentUserId = Long.valueOf(currentUserIdStr);
+        Course existingCourse = courseService.getCourseById(courseId);
+        if (existingCourse == null || !existingCourse.getInstructor().getId().equals(currentUserId))
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         Course updatedCourse = courseService.updateCourse(courseId, course);
         return ResponseEntity.ok(updatedCourse);
     }
@@ -65,9 +70,15 @@ public class CourseController {
     public ResponseEntity<Lesson> addLessonToCourse(
             @PathVariable Long courseId,
             @RequestBody Lesson lesson) {
+        String currentUserIdStr = SecurityContextHolder.getContext().getAuthentication().getName();
+        Long currentUserId = Long.valueOf(currentUserIdStr);
+        Course course = courseService.getCourseById(courseId);
+        if (course == null || !course.getInstructor().getId().equals(currentUserId))
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         Lesson addedLesson = courseService.addLessonToCourse(courseId, lesson);
         return ResponseEntity.ok(addedLesson);
     }
+
 
     //to get the list of all courses
     @GetMapping("/getAllCourses")
