@@ -1,16 +1,12 @@
 package com.example.lms.controller;
 
-import com.example.lms.model.Assessment;
-import com.example.lms.model.Course;
-import com.example.lms.model.Submission;
-import com.example.lms.service.AssessmentService;
-import com.example.lms.service.CourseService;
-import com.example.lms.service.EnrollmentService;
-import com.example.lms.service.SubmissionService;
+import com.example.lms.model.*;
+import com.example.lms.service.*;
 import jakarta.annotation.security.RolesAllowed;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,7 +21,7 @@ public class StudentController {
     private final SubmissionService submissionService;
     private final EnrollmentService enrollmentService;
     private final CourseService courseService;
-
+    private final UserService userService;
     //to get the list of all courses
     @GetMapping("/getAllCourses")
     @RolesAllowed({"STUDENT"})
@@ -51,16 +47,18 @@ public class StudentController {
     }
 
     @RolesAllowed({"STUDENT"})
-    @GetMapping("/{studentId}/enrolledCourses")
-    public ResponseEntity<List<Course>> getEnrolledCourses(@PathVariable Long studentId) {
-        try {
-            List<Course> courses = enrollmentService.getEnrolledCoursesByStudent(studentId);
-            return ResponseEntity.ok(courses);
-        } catch (NoSuchElementException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+    @GetMapping("/enrolledCourses")
+    public ResponseEntity<List<Enrollment>> getEnrolledCourses() {
+        String name = SecurityContextHolder.getContext().getAuthentication().getName();
+        User student = userService.findById(Long.valueOf(name));
+        if (student == null || student.getRole() != Role.STUDENT) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
+        List<Enrollment> courses = courseService.getEnrolledCoursesByStudentId(student.getId());
+        if (courses.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(courses);
     }
 
 

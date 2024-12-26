@@ -23,6 +23,9 @@ public class CourseService {
     @Autowired
     private QuizRepository quizRepository;
 
+    @Autowired
+    private EnrollmentRepository enrollmentRepository;
+
 
     public Course getCourseById(Long courseId) {
         return courseRepository.findById(courseId)
@@ -97,4 +100,13 @@ public class CourseService {
     public List<Lesson> getAllLessons(Long courseId) {
         return lessonRepository.findByCourseId(courseId);
     }
+
+    public List<Course> getCoursesByInstructorId(Long instructorId) {
+        return courseRepository.findByInstructorId(instructorId);
+    }
+    public List<Enrollment> getEnrolledCoursesByStudentId(Long studentId) {
+        return enrollmentRepository.findByStudentId(studentId);
+    }
+
+
 }

@@ -11,7 +11,6 @@ import java.util.List;
 public interface CourseRepository extends JpaRepository<Course, Long> {
     // Find all courses created by a specific instructor
     List<Course> findByInstructor(User instructor);
+    List<Course> findByInstructorId(Long instructorId);
 
-    // Find courses by title containing a keyword (for search functionality)
-    List<Course> findByTitleContaining(String keyword);
 }

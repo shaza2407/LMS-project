@@ -4,7 +4,9 @@ import com.example.lms.model.*;
 import com.example.lms.service.*;
 import jakarta.annotation.security.RolesAllowed;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,6 +20,23 @@ public class InstructorController {
     private final AttendanceService attendanceService;
     private final CourseService courseService;
     private final QuizService quizService;
+    private final UserService userService;
+
+
+    @RolesAllowed({"INSTRUCTOR"})
+    @GetMapping("/courses")
+    public ResponseEntity<List<Course>> getCoursesForAuthenticatedInstructor() {
+        String name = SecurityContextHolder.getContext().getAuthentication().getName();
+        User instructor = userService.findById(Long.valueOf(name));
+        if (instructor == null || instructor.getRole() != Role.INSTRUCTOR) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        List<Course> courses = courseService.getCoursesByInstructorId(instructor.getId());
+        if (courses.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(courses);
+    }
 
 
 
@@ -43,7 +62,6 @@ public class InstructorController {
         Submission gradedSubmission = submissionService.gradeSubmission(submissionId, grade, feedback);
         return ResponseEntity.ok(gradedSubmission);
     }
-
 
     //Quizes:
     //add question to course question bank
