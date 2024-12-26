@@ -1,5 +1,6 @@
 package com.example.lms.controller;
 import com.example.lms.model.*;
+import com.example.lms.repository.UserRepository;
 import com.example.lms.service.CourseService;
 import com.example.lms.service.EnrollmentService;
 import com.example.lms.service.UserService;
@@ -19,11 +20,12 @@ public class CourseController {
 
     @Autowired
     private CourseService courseService;
-
     @Autowired
     private EnrollmentService enrollmentService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private UserRepository userRepository;
 
     //create new course
     @RolesAllowed({"INSTRUCTOR"})
@@ -42,17 +44,23 @@ public class CourseController {
 
 
     // update course details
-    @RolesAllowed({"INSTRUCTOR", "ADMIN"})
+    @RolesAllowed({"INSTRUCTOR","ADMIN"})
     @PutMapping("/{courseId}/update")
     public ResponseEntity<Course> updateCourse(
             @PathVariable Long courseId,
             @RequestBody Course course) {
+
+        String currentUserIdStr = SecurityContextHolder.getContext().getAuthentication().getName();
+        Long currentUserId = Long.valueOf(currentUserIdStr);
+        Course existingCourse = courseService.getCourseById(courseId);
+        if (existingCourse == null || !existingCourse.getInstructor().getId().equals(currentUserId))
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         Course updatedCourse = courseService.updateCourse(courseId, course);
         return ResponseEntity.ok(updatedCourse);
     }
 
     //deleting a course
-    @RolesAllowed({"INSTRUCTOR", "ADMIN"})
+    @RolesAllowed({"INSTRUCTOR","ADMIN"})
     @DeleteMapping("/{courseId}/delete")
     public ResponseEntity<String> deleteCourse(@PathVariable Long courseId) {
         courseService.deleteCourse(courseId);
@@ -65,9 +73,15 @@ public class CourseController {
     public ResponseEntity<Lesson> addLessonToCourse(
             @PathVariable Long courseId,
             @RequestBody Lesson lesson) {
+        String currentUserIdStr = SecurityContextHolder.getContext().getAuthentication().getName();
+        Long currentUserId = Long.valueOf(currentUserIdStr);
+        Course course = courseService.getCourseById(courseId);
+        if (course == null || !course.getInstructor().getId().equals(currentUserId))
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         Lesson addedLesson = courseService.addLessonToCourse(courseId, lesson);
         return ResponseEntity.ok(addedLesson);
     }
+
 
     //to get the list of all courses
     @GetMapping("/getAllCourses")
@@ -93,8 +107,8 @@ public class CourseController {
         return course != null ? ResponseEntity.ok(course) : ResponseEntity.notFound().build();
     }
 
-    //to get all students in specific course
-    @RolesAllowed({"INSTRUCTOR"})
+    //get all enrolled students to specific course
+    @RolesAllowed({"ADMIN", "INSTRUCTOR"})
     @GetMapping("/{courseId}/enrolledStudents")
     public ResponseEntity<List<User>> getEnrolledStudents(@PathVariable Long courseId) {
         String instructorIdStr = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -107,4 +121,5 @@ public class CourseController {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         return ResponseEntity.ok(enrolledStudents);
     }
+
 }

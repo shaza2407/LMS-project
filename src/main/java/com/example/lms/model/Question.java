@@ -17,7 +17,6 @@ public class Question {
     private Long id;
 
     private String content;
-//    @JsonIgnore
     private String  answer;
 
     @ManyToOne

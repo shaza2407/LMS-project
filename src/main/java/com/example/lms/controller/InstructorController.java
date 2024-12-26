@@ -38,8 +38,6 @@ public class InstructorController {
         return ResponseEntity.ok(courses);
     }
 
-
-
     //assignment:
     //create assignment
     @RolesAllowed({"INSTRUCTOR"})
