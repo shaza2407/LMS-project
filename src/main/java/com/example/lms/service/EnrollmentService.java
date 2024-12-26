@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class EnrollmentService
@@ -75,6 +77,17 @@ public class EnrollmentService
 
         return "Student successfully enrolled in the course";
     }
+
+    public List<Course> getEnrolledCoursesByStudent(Long studentId) {
+        List<Enrollment> enrollments = enrollmentRepository.findByStudentId(studentId);
+        if (enrollments.isEmpty()) {
+            throw new NoSuchElementException("No enrollments found for the student.");
+        }
+        return enrollments.stream()
+                .map(Enrollment::getCourse)
+                .toList();
+    }
+
 }
 //- Students (enrollment confirmation, grades).
 //        - Instructors (students enrolling in their course).

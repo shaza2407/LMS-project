@@ -1,8 +1,10 @@
 package com.example.lms.controller;
 
 import com.example.lms.model.Assessment;
+import com.example.lms.model.Course;
 import com.example.lms.model.Submission;
 import com.example.lms.service.AssessmentService;
+import com.example.lms.service.CourseService;
 import com.example.lms.service.EnrollmentService;
 import com.example.lms.service.SubmissionService;
 import jakarta.annotation.security.RolesAllowed;
@@ -22,6 +24,24 @@ public class StudentController {
     private final AssessmentService assessmentService;
     private final SubmissionService submissionService;
     private final EnrollmentService enrollmentService;
+    private final CourseService courseService;
+
+    //to get the list of all courses
+    @GetMapping("/getAllCourses")
+    @RolesAllowed({"STUDENT"})
+    public ResponseEntity<List<Course>> getAllCourses() {
+        List<Course> courses = courseService.getAllCourses();
+        return ResponseEntity.ok(courses);
+    }
+
+    // get course details by its id
+    @GetMapping("/{courseId}/getCourse")
+    @RolesAllowed({"STUDENT"})
+    public ResponseEntity<Course> getCourseById(@PathVariable Long courseId) {
+        Course course = courseService.getCourseById(courseId);
+        return course != null ? ResponseEntity.ok(course) : ResponseEntity.notFound().build();
+    }
+
     // enroll student in a course
     @RolesAllowed({"STUDENT"})
     @PostMapping("/{courseId}/enroll")
@@ -29,6 +49,21 @@ public class StudentController {
         String response = enrollmentService.enrollStudent(courseId, studentId);
         return ResponseEntity.ok(response);
     }
+
+    @RolesAllowed({"STUDENT"})
+    @GetMapping("/{studentId}/enrolledCourses")
+    public ResponseEntity<List<Course>> getEnrolledCourses(@PathVariable Long studentId) {
+        try {
+            List<Course> courses = enrollmentService.getEnrolledCoursesByStudent(studentId);
+            return ResponseEntity.ok(courses);
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+
     //get assignment
     @RolesAllowed({"STUDENT"})
     @GetMapping("/{studentId}/courses/{courseId}/assessments")

@@ -53,25 +53,6 @@ public class CourseController {
     }
 
 
-//    //create new course
-//    @RolesAllowed({"INSTRUCTOR"})
-//    @PostMapping("/createCourse")
-//
-//    public ResponseEntity<Course> createCourse(@PathVariable Long instructorId, @RequestBody Course course) {
-////        // Find the instructor by ID
-////        User instructor = userService.findById(course.getInstructor().getId());
-////
-////        if (instructor == null || !instructor.getRole().equals("INSTRUCTOR")) {
-////            return ResponseEntity.badRequest().body(null);  // You can customize the error response
-////        }
-//
-//        User user = userRepository.findById(instructorId)
-//                .orElseThrow(() -> new RuntimeException("user not found"));
-//        course.setInstructor(user);
-////        course createdCourse = courseService.createCourse(course);
-//        return ResponseEntity.ok(course);
-//    }
-
     // update course details
     @RolesAllowed({"INSTRUCTOR","ADMIN"})
     @PutMapping("/{courseId}/update")
@@ -103,7 +84,7 @@ public class CourseController {
 
     //to get the list of all courses
     @GetMapping("/getAllCourses")
-    @RolesAllowed({"ADMIN", "INSTRUCTOR", "STUDENT"})
+    @RolesAllowed({"ADMIN", "INSTRUCTOR"})
     public ResponseEntity<List<Course>> getAllCourses() {
         List<Course> courses = courseService.getAllCourses();
         return ResponseEntity.ok(courses);
@@ -111,7 +92,7 @@ public class CourseController {
 
     //to get list of all lessons
     @GetMapping("/{courseId}/getAllLessons")
-    @RolesAllowed({"ADMIN", "INSTRUCTOR", "STUDENT"})
+    @RolesAllowed({"ADMIN", "INSTRUCTOR"})
     public ResponseEntity<List<Lesson>> getAllLessons(@PathVariable Long courseId) {
         List<Lesson> lessons = courseService.getAllLessons(courseId);
         return ResponseEntity.ok(lessons);
@@ -119,7 +100,7 @@ public class CourseController {
 
     // get course details by its id
     @GetMapping("/{courseId}/getCourse")
-    @RolesAllowed({"ADMIN", "INSTRUCTOR", "STUDENT"})
+    @RolesAllowed({"ADMIN", "INSTRUCTOR"})
     public ResponseEntity<Course> getCourseById(@PathVariable Long courseId) {
         Course course = courseService.getCourseById(courseId);
         return course != null ? ResponseEntity.ok(course) : ResponseEntity.notFound().build();

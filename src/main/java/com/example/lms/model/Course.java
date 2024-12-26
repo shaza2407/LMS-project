@@ -26,20 +26,26 @@ public class Course {
 
     @ManyToOne
     @JoinColumn(name = "instructor_id")
+    @JsonIgnore
     private User instructor;
 
     @OneToMany(mappedBy = "course")
+    @JsonIgnore
     private List<Enrollment> enrollments;
 
     @OneToMany(mappedBy = "course")
+    @JsonIgnore
     private List<Lesson> lessons;
 
     @OneToMany(mappedBy = "course")
+    @JsonIgnore
     private List<Assessment> assignments;
 
     @OneToMany(mappedBy = "course")
+    @JsonIgnore
     private List<Question> questionBanks;
 
     @OneToMany(mappedBy = "course")
+    @JsonIgnore
     private List<Quiz> quizzes;
 }
