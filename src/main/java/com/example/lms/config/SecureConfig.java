@@ -21,7 +21,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
         jsr250Enabled = true,
         securedEnabled = true
 )
-public class SecureConfig {
+public class SecureConfig  {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
@@ -32,7 +32,7 @@ public class SecureConfig {
                         .requestMatchers("/api/users/**").permitAll()
                         .requestMatchers("/api/students/**").hasAnyRole(Role.STUDENT.name(), Role.ADMIN.name(),
                                 Role.INSTRUCTOR.name())
-                        .requestMatchers("/api/instructors/**").hasAnyRole(Role.INSTRUCTOR.name(), Role.ADMIN.name(),Role.STUDENT.name())
+                        .requestMatchers("/api/instructors/**").hasAnyRole(Role.INSTRUCTOR.name(), Role.ADMIN.name())
                         .requestMatchers("/api/admins/**").hasRole(Role.ADMIN.name())
                         .anyRequest().authenticated()
                 ).sessionManagement((session) -> session

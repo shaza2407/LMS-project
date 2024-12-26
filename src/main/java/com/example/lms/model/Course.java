@@ -26,11 +26,9 @@ public class Course {
 
     @ManyToOne
     @JoinColumn(name = "instructor_id")
-    @JsonIgnore
     private User instructor;
 
     @OneToMany(mappedBy = "course")
-    //@JsonManagedReference
     private List<Enrollment> enrollments;
 
     @OneToMany(mappedBy = "course")

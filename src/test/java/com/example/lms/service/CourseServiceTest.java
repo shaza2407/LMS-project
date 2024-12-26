@@ -2,6 +2,7 @@ package com.example.lms.service;
 
 import com.example.lms.model.*;
 import com.example.lms.repository.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -163,4 +164,16 @@ class CourseServiceTest {
         courseService.deleteCourse(courseId);
         verify(courseRepository, times(1)).deleteById(courseId);
     }
+
+    @Test
+    public void testDeserialization() throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+        String json = "{ \"title\": \"batee5\", \"description\": \"how to cut batee5\", \"duration\": 8 }";
+
+        Course course = mapper.readValue(json, Course.class);
+        assertEquals("batee5", course.getTitle());
+        assertEquals("how to cut batee5", course.getDescription());
+        assertEquals(8, course.getDuration());
+    }
+
 }

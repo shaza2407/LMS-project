@@ -3,6 +3,7 @@ package com.example.lms.controller;
 import com.example.lms.model.Assessment;
 import com.example.lms.model.Submission;
 import com.example.lms.service.AssessmentService;
+import com.example.lms.service.EnrollmentService;
 import com.example.lms.service.SubmissionService;
 import jakarta.annotation.security.RolesAllowed;
 import lombok.AllArgsConstructor;
@@ -20,7 +21,14 @@ import java.util.NoSuchElementException;
 public class StudentController {
     private final AssessmentService assessmentService;
     private final SubmissionService submissionService;
-
+    private final EnrollmentService enrollmentService;
+    // enroll student in a course
+    @RolesAllowed({"STUDENT"})
+    @PostMapping("/{courseId}/enroll")
+    public ResponseEntity<String> enrollStudent(@PathVariable Long courseId, @RequestParam Long studentId) {
+        String response = enrollmentService.enrollStudent(courseId, studentId);
+        return ResponseEntity.ok(response);
+    }
     //get assignment
     @RolesAllowed({"STUDENT"})
     @GetMapping("/{studentId}/courses/{courseId}/assessments")

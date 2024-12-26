@@ -54,6 +54,13 @@ public class UserService {
     public User findById(Long id) {
         return userRepository.findById(id).orElse(null);  // Return null if not found
 }
+
+    public User findByUsername(String username) {
+        return userRepository.findByName(username).orElse(null);
+    }
+
 }
+
+
 
 

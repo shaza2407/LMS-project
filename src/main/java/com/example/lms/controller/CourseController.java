@@ -6,7 +6,9 @@ import com.example.lms.service.EnrollmentService;
 import com.example.lms.service.UserService;
 import jakarta.annotation.security.RolesAllowed;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,22 +28,30 @@ public class CourseController {
     @Autowired
     private UserRepository userRepository;
 
-    // enroll student in a course
-    @RolesAllowed({"STUDENT"})
-    @PostMapping("/{courseId}/enroll")
-    public ResponseEntity<String> enrollStudent(@PathVariable Long courseId, @RequestParam Long studentId) {
-        String response = enrollmentService.enrollStudent(courseId, studentId);
-        return ResponseEntity.ok(response);
-    }
 
+//    //create new course
+//    @RolesAllowed({"INSTRUCTOR"})
+//    @PostMapping("/createCourse")
+//    public ResponseEntity<Course> createCourse(@RequestBody Course course) {
+//        Course createdCourse = courseService.createCourse(course);
+//        return ResponseEntity.ok(createdCourse);
+//    }
 
     //create new course
     @RolesAllowed({"INSTRUCTOR"})
     @PostMapping("/createCourse")
     public ResponseEntity<Course> createCourse(@RequestBody Course course) {
+        String name = SecurityContextHolder.getContext().getAuthentication().getName();
+        User instructor = userService.findById(Long.valueOf(name));
+        if (instructor == null || instructor.getRole() != Role.INSTRUCTOR) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        course.setInstructor(instructor);
         Course createdCourse = courseService.createCourse(course);
+
         return ResponseEntity.ok(createdCourse);
     }
+
 
 //    //create new course
 //    @RolesAllowed({"INSTRUCTOR"})
