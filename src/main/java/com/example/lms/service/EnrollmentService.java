@@ -60,19 +60,18 @@ public class EnrollmentService
 
 
 
-        User STUDENT = course.getInstructor();
-        if (STUDENT != null) {
+        if (student != null) {
             String message = "Enrolled in " + course.getTitle() + " successfully" + course.getTitle();
             Notification notification = new Notification(
                     message,
                     LocalDate.now().atStartOfDay(), // Timestamp
-                    STUDENT // Sender
+                    student // Sender
             );
             notificationService.addNotification(notification); // Save notification
         }
 
         String body = "Enrolled in " + course.getTitle() + " successfully" + course.getTitle();
-        notificationService.setNotificationsEmail(STUDENT.getEmail(), "Course enrollment", body);
+        notificationService.setNotificationsEmail(student.getEmail(), "Course enrollment", body);
 
         return "Student successfully enrolled in the course";
     }
